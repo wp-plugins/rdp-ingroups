@@ -94,13 +94,34 @@ Click on the RSS icon in the group header to open the standard RSS feed in a bro
 
 == Usage ==
 
-Add the [rdp-ingroups-group] shortcode to a page and specify a group ID, which will display discussions of the designated group to site visitors: [rdp-ingroups-group id=2069898]. 
-The shortcode will display a *Sign in with LinkedIn* button if the user is not logged in.
+= LinkedIn Group Discussions =
+RDP inGroups+ is implemented using the shortcode [rdp-ingroups-group]. It accepts the following arguments:
 
-For a display of a group's member count, use the [rdp-ingroups-member-count] shortcode. 
-The id attribute is required and is set to a group ID: [rdp-ingroups-member-count id=209217]. 
-You can also specify a url to make the member count a hyperlink: [rdp-ingroups-member-count id=209217 link=http://example.com]. 
-To make the link open in a new tab, add new as a shortcode attribute: [rdp-ingroups-member-count id=209217 link=http://example.com new].
+* id: (required) a group ID
+
+Examples:
+
+[rdp-ingroups-group id=2069898]
+
+This will display discussions of the designated group to site visitors. The shortcode will display a *Sign in with LinkedIn* button if the user is not logged in.
+
+= LinkedIn Group Member Count =
+For a display of a group's member count, use the [rdp-ingroups-member-count] shortcode. It accepts the following arguments:
+
+* id: (required) a group ID
+* link: a url to make the member count a hyperlink
+* new: make the link open in a new tab
+
+Examples:
+
+[rdp-ingroups-member-count id=209217]
+
+[rdp-ingroups-member-count id=209217 link=http://example.com]
+
+[rdp-ingroups-member-count id=209217 link=http://example.com new]
+
+
+= LinkedIn Sign In Button =
 
 To display a *Sign in with LinkedIn* button, use the [rdp-ingroups-login] shortcode.
 
