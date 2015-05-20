@@ -60,16 +60,14 @@ This plug-in brought to you through the generous funding of [Laboratory Informat
 3. Activate RDP inGroups+ from your Plugins page.
 
 
-= After Activation =
+= After Activation - Go to 'Settings > RDP inGroups+' and: =
 
-Visit 'Settings > RDP inGroups+' and:
-
-* 1. Get LinkedIn Application API keys using the link and settings shown at the top of the settings page.
-* 2. Enter API Key.
-* 3. Enter Secret Key.
-* 4. Set other configurations as desired.
-* 5. Click 'Save Changes' button.
-* 6. Add the [rdp-ingroups-group] shortcode to a page and save the page.
+1. Get LinkedIn Application API keys using the link and settings shown at the top of the settings page.
+2. Enter API Key.
+3. Enter Secret Key.
+4. Set other configurations as desired.
+5. Click 'Save Changes' button.
+6. Add the [rdp-ingroups-group] shortcode to a page and save the page.
 
 
 = Extra =
