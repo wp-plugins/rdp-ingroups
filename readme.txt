@@ -92,6 +92,20 @@ The auto-follow feature is a one-time process for each user who is registered wi
 Click on the RSS icon in the group header to open the standard RSS feed in a browser window. Now, modify the URL in the newly opened window by changing rss.php to rss_1.php.
 
 
+== Usage ==
+
+Add the [rdp-ingroups-group] shortcode to a page and specify a group ID, which will display discussions of the designated group to site visitors: [rdp-ingroups-group id=2069898].
+The shortcode will display a *Sign in with LinkedIn* button if the user is not logged in.
+
+For a display of a group's member count, use the [rdp-ingroups-member-count] shortcode.
+The id attribute is required and is set to a group ID: [rdp-ingroups-member-count id=209217]
+You can also specify a url to make the member count a hyperlink: [rdp-ingroups-member-count id=209217 link=http://example.com]
+To make the link open in a new tab, add new as a shortcode attribute: [rdp-ingroups-member-count id=209217 link=http://example.com new]
+
+To display a *Sign in with LinkedIn* button, use the [rdp-ingroups-login] shortcode.
+
+
+
 == Screenshots ==
 
 1. Login button shortcode in sidebar. 
