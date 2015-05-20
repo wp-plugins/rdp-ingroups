@@ -17,6 +17,7 @@ You can set a default group ID in the group shortcode so that a group's discussi
 You can set up multiple pages on your site to display different groups by setting a different group ID for each shortcode.
 
 RDP inGroups+ provides:
+
 * Group shortcode - display a list of discussions for a single group by supplying a LinkedIn group ID
 * Login button shortcode - shows a *Sign in with LinkedIn* button when logged out
 * Member Count shortcode, with the ability to designate a link URL
@@ -62,12 +63,13 @@ This plug-in brought to you through the generous funding of [Laboratory Informat
 = After Activation =
 
 Visit 'Settings > RDP inGroups+' and:
-1. Get LinkedIn Application API keys using the link and settings shown at the top of the settings page.
-2. Enter API Key.
-3. Enter Secret Key.
-4. Set other configurations as desired.
-5. Click 'Save Changes' button.
-6. Add the [rdp-ingroups-group] shortcode to a page and save the page.
+
+* 1. Get LinkedIn Application API keys using the link and settings shown at the top of the settings page.
+* 2. Enter API Key.
+* 3. Enter Secret Key.
+* 4. Set other configurations as desired.
+* 5. Click 'Save Changes' button.
+* 6. Add the [rdp-ingroups-group] shortcode to a page and save the page.
 
 
 = Extra =
@@ -114,82 +116,97 @@ Click on the RSS icon in the group header to open the standard RSS feed in a bro
 
 == Other Notes ==
 
-= External Scripts Included =
+== External Scripts Included ==
 jQuery.PositionCalculator v1.1.2 under MIT License
 Query Object v2.1.8 under WTFPL License
 URL v1.8.6 under MIT License
 
-= Hook Reference: =
+== Hook Reference: ==
 
-**rdp_lig_before_user_login**
-Param: JSON object representing a LinkedIn Person containing firstName, lastName, emailAddress, pictureUrl, publicProfileUrl, and id
-Fires before any user is logged into the site via LinkedIn.
+= rdp_lig_before_user_login =
 
-**rdp_lig_after_insert_user**
-Param: WP User Object
-Fires after a new user is registered with the site. *(Register New Users? must be enabled)*
+* Param: JSON object representing a LinkedIn Person containing firstName, lastName, emailAddress, pictureUrl, publicProfileUrl, and id
+* Fires before any user is logged into the site via LinkedIn.
 
-**rdp_lig_after_registered_user_login**
-Param: WP User Object
-Fires after a registered user is logged into the site. *(Register New Users? must be enabled)*
+= rdp_lig_after_insert_user =
 
-**rdp_lig_registered_user_login_fail**
-Param: JSON object representing a LinkedIn Person containing firstName, lastName, emailAddress, pictureUrl, publicProfileUrl, and id
-Fires after a failed attempt to log registered user into the site. *(Register New Users? must be enabled)*
+* Param: WP User Object
+* Fires after a new user is registered with the site. *(Register New Users? must be enabled)*
 
-**rdp_lig_after_user_login**
-Param: RDP_LIG_DATAPASS object
-Fires after any user is logged into the site via LinkedIn.
+= rdp_lig_after_registered_user_login =
 
-**rdp_lig_after_scripts_styles**
-Param: none
-Fires after enqueuing plug-in-specific scripts and styles
+* Param: WP User Object
+* Fires after a registered user is logged into the site. *(Register New Users? must be enabled)*
 
-= Filter Reference: =
+= rdp_lig_registered_user_login_fail =
 
-**rdp_lig_render_header_top**
-Param 1: String containing opening div and wrapper HTML for header section
-Param 2: String containing status - 'true' if user is logged in, 'false' otherwise
-Return: opening HTML for header section
+* Param: JSON object representing a LinkedIn Person containing firstName, lastName, emailAddress, pictureUrl, publicProfileUrl, and id
+* Fires after a failed attempt to log registered user into the site. *(Register New Users? must be enabled)*
 
-**rdp_lig_render_header**
-Param 1: String containing the body HTML for header section
-Param 2: String containing status - 'true' if user is logged in, 'false' otherwise
-Return: body HTML for header section
+= rdp_lig_after_user_login =
 
-**rdp_lig_render_header_bottom**
-Param 1: String containing closing wrapper and div HTML for header section
-Param 2: String containing status - 'true' if user is logged in, 'false' otherwise
-Return: closing HTML for header section
+* Param: RDP_LIG_DATAPASS object
+* Fires after any user is logged into the site via LinkedIn.
 
-**rdp_lig_render_main_container_header**
-Param 1: String containing HTML for main container header section
-Param 2: String containing status - 'true' if user is logged in, 'false' otherwise
-Return: HTML for main container header section
-Default behavior is to render the group profile logo and name
+= rdp_lig_after_scripts_styles =
 
-**rdp_lig_render_paging**
-Param 1: String containing HTML for paging section
-Param 2: String containing status - 'true' if user is logged in, 'false' otherwise
-Param 3: String containing the location - 'top' of main container section, 'bottom' of main container section
-Return: HTML for paging section. For infinity paging, location 'top' is not rendered.
+* Param: none
+* Fires after enqueuing plug-in-specific scripts and styles
 
-**rdp_lig_render_login**
-Param 1: String containing log-in HTML for the **[rdp-ingroups-login]** shortcode
-Param 2: String containing status - 'true' if user is logged in, 'false' otherwise
-Return: log-in HTML for the **[rdp-ingroups-login]** shortcode
+== Filter Reference: ==
 
-**rdp_lig_before_insert_user**
-Param 1: Boolean indicating if user exists based on result of Wordpress username_exists() function, using supplied email address 
-Param 2: JSON object representing a LinkedIn Person containing firstName, lastName, emailAddress, pictureUrl, publicProfileUrl, and id
-Return: Boolean indicating if user exists
+= rdp_lig_render_header_top =
 
-**rdp_lig_before_registered_user_login**
-Param 1: Boolean indicating if user is logged in based on result of Wordpress is_user_logged_in() function
-Param 2: String containing email address of user
-Return: Boolean indicating if user is logged in
+* Param 1: String containing opening div and wrapper HTML for header section
+* Param 2: String containing status - 'true' if user is logged in, 'false' otherwise
+* Return: opening HTML for header section
 
-**rdp_lig_custom_menu_items**
-Param 1: Array to hold custom link data
-Param 2: String containing status - 'true' if user is logged in, 'false' otherwise
-Return: Array of links, where the link text is the key and the link URL is the value
+= rdp_lig_render_header =
+
+* Param 1: String containing the body HTML for header section
+* Param 2: String containing status - 'true' if user is logged in, 'false' otherwise
+* Return: body HTML for header section
+
+= rdp_lig_render_header_bottom =
+
+* Param 1: String containing closing wrapper and div HTML for header section
+* Param 2: String containing status - 'true' if user is logged in, 'false' otherwise
+* Return: closing HTML for header section
+
+= rdp_lig_render_main_container_header =
+
+* Param 1: String containing HTML for main container header section
+* Param 2: String containing status - 'true' if user is logged in, 'false' otherwise
+* Return: HTML for main container header section
+* Default behavior is to render the group profile logo and name
+
+= rdp_lig_render_paging =
+
+* Param 1: String containing HTML for paging section
+* Param 2: String containing status - 'true' if user is logged in, 'false' otherwise
+* Param 3: String containing the location - 'top' of main container section, 'bottom' of main container section
+* Return: HTML for paging section. For infinity paging, location 'top' is not rendered.
+
+= rdp_lig_render_login =
+
+* Param 1: String containing log-in HTML for the **[rdp-ingroups-login]** shortcode
+* Param 2: String containing status - 'true' if user is logged in, 'false' otherwise
+* Return: log-in HTML for the **[rdp-ingroups-login]** shortcode
+
+= rdp_lig_before_insert_user =
+
+* Param 1: Boolean indicating if user exists based on result of Wordpress username_exists() function, using supplied email address 
+* Param 2: JSON object representing a LinkedIn Person containing firstName, lastName, emailAddress, pictureUrl, publicProfileUrl, and id
+* Return: Boolean indicating if user exists
+
+= rdp_lig_before_registered_user_login =
+
+* Param 1: Boolean indicating if user is logged in based on result of Wordpress is_user_logged_in() function
+* Param 2: String containing email address of user
+* Return: Boolean indicating if user is logged in
+
+= rdp_lig_custom_menu_items =
+
+* Param 1: Array to hold custom link data
+* Param 2: String containing status - 'true' if user is logged in, 'false' otherwise
+* Return: Array of links, where the link text is the key and the link URL is the value
