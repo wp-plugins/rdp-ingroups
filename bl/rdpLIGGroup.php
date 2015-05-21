@@ -234,7 +234,7 @@ class RDP_LIG_Group {
         $params['rdpingroupskey'] = $Datapass->key(); 
         $url = add_query_arg($params,$url);  
         $sHTML .= '<h3>';
-        if($fTruncate)$sHTML .= '<a href="' . $url . '" class="rdp-lig-post-link" postid="' . $Post->id . '" >';
+        if($fTruncate)$sHTML .= '<a href="' . $url . '" target="_new" class="rdp-lig-post-link" postid="' . $Post->id . '" >';
         $sHTML .= stripslashes($Post->title);
         if($fTruncate)$sHTML .= '</a>';
         $sHTML .= '</h3>';
