@@ -347,6 +347,9 @@ class RDP_LIG_Utilities {
             case "we": 
                 if (strpos($active, "rdp-wiki-press-embed")) $rv = true;
                 break;             
+            case "bp": 
+                if (strpos($active, "buddypress") !== FALSE) $rv = true;
+                break;             
         }//switch
         
        return $rv; 
