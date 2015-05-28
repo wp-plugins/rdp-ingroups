@@ -57,7 +57,7 @@ class RDP_LIG_Discussion {
                     $Creator->name = $anchor->plaintext;
                     $Creator->profileURL = $anchor->href;
                     parse_str(parse_url($anchor->href, PHP_URL_QUERY), $output);
-                    if(in_array('id', $output))$Creator->id = $output['id'];                    
+                    if(key_exists('id', $output))$Creator->id = $output['id'];                    
                 }
                 $headline = $oHeader->find('span.subtitle',0);
                 if($headline)$Creator->headline = RDP_LIG_Utilities::entitiesPlain($headline->plaintext);
@@ -92,7 +92,7 @@ class RDP_LIG_Discussion {
                 $anchor = $ret->find('h4.article-title a',0);
                 if($anchor){
                     parse_str(parse_url($anchor->href, PHP_URL_QUERY), $output);
-                    if(in_array('url', $output))$Attachment->contentUrl = rawurldecode($output['url']);
+                    if(key_exists('url', $output))$Attachment->contentUrl = rawurldecode($output['url']);
                     $Attachment->title = RDP_LIG_Utilities::entitiesPlain($anchor->plaintext);
                 }
 
