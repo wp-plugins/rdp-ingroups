@@ -89,7 +89,7 @@ class RDP_LIG_Discussion {
                 $img = $ret->find('img',0);
                 if($img)$Attachment->imageUrl = $img->src;
 
-                $anchor = $ret->find('h4.article-title a',0);
+                $anchor = $ret->find('h4.title a',0);
                 if($anchor){
                     parse_str(parse_url($anchor->href, PHP_URL_QUERY), $output);
                     if(key_exists('url', $output))$Attachment->contentUrl = rawurldecode($output['url']);
