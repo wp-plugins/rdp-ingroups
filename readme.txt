@@ -147,6 +147,7 @@ To display a *Sign in with LinkedIn* button, use the [rdp-ingroups-login] shortc
 
 = 0.5.2 =
 * minor bug fixes
+* updated sign-in procedure to update usermeta table with current LinkedIn picture URL and public profile URL
 
 = 0.5.1 =
 * added ability to detect if BuddyPress is active
