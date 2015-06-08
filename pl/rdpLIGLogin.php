@@ -74,7 +74,6 @@ class RDP_LIG_Login{
 
         $nGroupID = (isset($authPass['rdpingroupsid']))? $authPass['rdpingroupsid'] : 0;
         if(!is_numeric($nGroupID))$nGroupID = 0;
-        RDP_LIG_Utilities::handleUserAddToGroup($nGroupID,$authPass['access_token']);
         
         $sPostID = (isset($authPass['rdpingroupspostid']))? $authPass['rdpingroupspostid'] : 0;
         
@@ -92,17 +91,6 @@ class RDP_LIG_Login{
     
     public function afterUserInsert($user){
         RDP_LIG_Company::handleCompaniesToFollow($this->_datapass);
-        
-        /* handle Groups To Join */
-        $access_token = $this->_datapass->access_token_get();
-        $options = get_option( RDP_LIG_PLUGIN::$options_name );
-        $text_string  = empty($options['sGroupsToJoin'])? '' : trim($options['sGroupsToJoin']);
-        if(empty($text_string))return;  
-        $str = preg_replace('#\s+#',',',$text_string); 
-        $oGroupIDs = explode(',', $str);
-        foreach($oGroupIDs as $nGroupID){
-            RDP_LIG_Utilities::handleUserAddToGroup($access_token,$nGroupID);
-        }        
     }//afterUserInsert
     
     private function renderCloseScript($key,$nGroupID,$sPostID){
