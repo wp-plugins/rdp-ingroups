@@ -4,7 +4,7 @@
 Plugin Name: RDP inGroups+
 Plugin URI: http://robert-d-payne.com/
 Description: Integrate LinkedIn groups into WordPress
-Version: 0.5.0
+Version: 0.5.2
 Author: Robert D Payne
 Author URI: http://robert-d-payne.com/
 License: GPLv2 or later
@@ -51,7 +51,7 @@ switch ( strtolower ( $sLIGAction)) {
 class RDP_LIG_PLUGIN{
     public static $plugin_slug = 'rdp-ligroups'; 
     public static $options_name = 'rdp_lig_options';    
-    public static $version = '0.5.0';    
+    public static $version = '0.5.2';    
     private $_options = array();
     
     public function __construct() {

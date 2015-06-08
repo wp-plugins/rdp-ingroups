@@ -3,7 +3,7 @@ Contributors: rpayne7264
 Tags: linkedin,linkedin groups,rdp linkedin,rdp groups+,rdp ingroups+,rdp linkedin groups,rdp linkedin groups+,ingroups+,
 Requires at least: 3.0
 Tested up to: 4.2.2
-Stable tag: 0.5.0
+Stable tag: 0.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -87,6 +87,10 @@ The auto-follow feature is a one-time process for each user who is registered wi
 
 == Frequently Asked Questions ==
 
+= So what does your plugin offer? =
+
+It'll pull content from publicly viewable groups by scrapping LinkedIn, with the content in both HTML format for display on a page and RSS format for displaying a feed.
+
 = How do I access the RSS feed designed for Mailchimp newsletters? =
 
 Click on the RSS icon in the group header to open the standard RSS feed in a browser window. Now, modify the URL in the newly opened window by changing rss.php to rss_1.php.
@@ -140,6 +144,13 @@ To display a *Sign in with LinkedIn* button, use the [rdp-ingroups-login] shortc
 9. Button to launch the shortcode embed helper form
 
 == Change Log ==
+
+= 0.5.2 =
+* minor bug fixes
+* updated sign-in procedure to update usermeta table with current LinkedIn picture URL and public profile URL
+
+= 0.5.1 =
+* added ability to detect if BuddyPress is active
 
 = 0.5.0 =
 * Initial RC
