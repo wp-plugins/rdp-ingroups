@@ -24,15 +24,14 @@ class RDP_LIG {
     
     function run() {
         if ( defined( 'DOING_AJAX' ) ) return;        
-        $this->_key = (isset($_GET['rdpingroupskey']))? $_GET['rdpingroupskey'] : '' ;
-        if(empty($this->_key)){
-            $options = get_option( RDP_LIG_PLUGIN::$options_name );
-            $fLIGRegisterNewUser = isset($options['fLIGRegisterNewUser'])? $options['fLIGRegisterNewUser'] : 'off';
-            if($fLIGRegisterNewUser == 'on' && is_user_logged_in()){
-                $current_user = wp_get_current_user();
-                $this->_key = md5($current_user->user_email);
-            }
+
+        $options = get_option( RDP_LIG_PLUGIN::$options_name );
+        $fLIGRegisterNewUser = isset($options['fLIGRegisterNewUser'])? $options['fLIGRegisterNewUser'] : 'off';
+        if($fLIGRegisterNewUser == 'on' && is_user_logged_in()){
+            $current_user = wp_get_current_user();
+            $this->_key = md5($current_user->user_email);
         }
+
         if(!has_filter('widget_text','do_shortcode'))add_filter('widget_text','do_shortcode',11);
         $this->_datapass = RDP_LIG_DATAPASS::get($this->_key); 
         if(isset($_GET['rdpingroupsaction']) && $_GET['rdpingroupsaction'] == 'logout'){
@@ -104,7 +103,6 @@ class RDP_LIG {
                 $fullName = $this->_datapass->fullName_get();
                 $params = RDP_LIG_Utilities::clearQueryParams();
                 $params['rdpingroupsaction'] = 'logout';
-                $params['rdpingroupscb'] = uniqid('', true);
                 $url = add_query_arg($params);
                
                 $oCustomMenuItems = array();
@@ -536,12 +534,10 @@ EOD;
             RDP_LIG_DATAPASS::delete($datapass->key());            
         }
 
-        global $wp_query;
-        $url = get_permalink($wp_query->get_queried_object_id());
-        $params = RDP_LIG_Utilities::clearQueryParams();
-        $params['rdpingroupscb'] = uniqid('', true);
-        $url = add_query_arg($params,$url);
 
+        $params = RDP_LIG_Utilities::clearQueryParams();
+        $url = add_query_arg($params);
+        
         // log the user out of WP, as well
         if(is_user_logged_in()){
             $url = wp_logout_url( $url );
@@ -551,6 +547,7 @@ EOD;
         // and persistent browser session cookies
         echo "<meta http-equiv='Refresh' content='0; url={$url}'>";
         ob_flush();
+        exit;
     }//handleLogout
     
     

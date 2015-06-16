@@ -3,7 +3,7 @@ Contributors: rpayne7264
 Tags: linkedin,linkedin groups,rdp linkedin,rdp groups+,rdp ingroups+,rdp linkedin groups,rdp linkedin groups+,ingroups+,
 Requires at least: 3.0
 Tested up to: 4.2.2
-Stable tag: 0.5.2
+Stable tag: 0.6.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,7 +35,7 @@ RDP inGroups+ provides:
 
 = Warning About Caching =
 
-This plug-in is intentionally coded to re-write hyperlinks with a cache-busting query string parameter so that the plug-in code is executed with every page load. Therefore, any sort of caching will be, effectively, disabled when using this plug-in.
+This plug-in will not work if caching is enabled on a web site.
 
 
 = Sponsor =
@@ -143,7 +143,11 @@ To display a *Sign in with LinkedIn* button, use the [rdp-ingroups-login] shortc
 8. Settings page.
 9. Button to launch the shortcode embed helper form
 
+
 == Change Log ==
+
+= 0.6.0 =
+* removed code to re-write hyperlinks with a cache-busting query string parameter
 
 = 0.5.2 =
 * minor bug fixes

@@ -86,21 +86,19 @@ class RDP_LIG_Login{
 
         do_action('rdp_lig_after_user_login', $this->_datapass);
 
-        $this->renderCloseScript($key,$nGroupID,$sPostID);
+        $this->renderCloseScript($nGroupID,$sPostID);
     }//__construct
     
     public function afterUserInsert($user){
         RDP_LIG_Company::handleCompaniesToFollow($this->_datapass);
     }//afterUserInsert
     
-    private function renderCloseScript($key,$nGroupID,$sPostID){
-        $cacheBuster = uniqid('', true);
-        
+    private function renderCloseScript($nGroupID,$sPostID){
         $JS = <<<EOS
 <script type='text/javascript'>
     function rdp_lig_login_onReady(){
         var baseURL = window.opener.location.protocol + "//" + window.opener.location.host + window.opener.location.pathname;
-        var params = jQuery.query.load(window.opener.location.href).REMOVE('rdpingroupsaction').SET('rdpingroupsid','{$nGroupID}').SET('rdpingroupskey','{$key}').SET('rdpingroupscb','{$cacheBuster}').SET('rdpingroupspostid','{$sPostID}');
+        var params = jQuery.query.load(window.opener.location.href).REMOVE('rdpingroupsaction').SET('rdpingroupsid','{$nGroupID}').SET('rdpingroupspostid','{$sPostID}');
 
         window.opener.location.href = baseURL+params;
         window.close();

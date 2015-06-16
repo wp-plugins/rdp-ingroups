@@ -51,7 +51,6 @@ class RDP_LIG_Groups {
         if($JSON->isOpenToNonMembers()){
             $sHTML .= '<div class="top-bar-actions">';
             $params = RDP_LIG_Utilities::clearQueryParams();
-            $params['rdpingroupskey'] = false;
             $url = add_query_arg($params,$url);
             $rssParams = array('id' => $JSON->id(),'link' => $url);
             $sRSSURL = plugins_url(dirname(RDP_LIG_PLUGIN_BASENAME) . '/ws/rss.php?'. http_build_query($rssParams));            

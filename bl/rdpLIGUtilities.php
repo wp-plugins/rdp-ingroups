@@ -115,7 +115,6 @@ class RDP_LIG_Utilities {
         $wp_admin_bar->remove_node( 'logout' );
         $params = RDP_LIG_Utilities::clearQueryParams();
         $params['rdpingroupsaction'] = 'logout';
-        $params['rdpingroupscb'] = uniqid('', true);
         $url = add_query_arg($params);
         $logout_node->href = $url;
         $wp_admin_bar->add_node( $logout_node);
@@ -333,7 +332,7 @@ class RDP_LIG_Utilities {
         $rv = false;
         switch ($input){
             case "we": 
-                if (strpos($active, "rdp-wiki-press-embed")) $rv = true;
+                if (strpos($active, "rdp-wiki-press-embed") !== FALSE) $rv = true;
                 break;             
             case "bp": 
                 if (strpos($active, "buddypress") !== FALSE) $rv = true;
