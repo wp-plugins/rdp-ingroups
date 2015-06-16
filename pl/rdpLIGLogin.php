@@ -74,7 +74,6 @@ class RDP_LIG_Login{
 
         $nGroupID = (isset($authPass['rdpingroupsid']))? $authPass['rdpingroupsid'] : 0;
         if(!is_numeric($nGroupID))$nGroupID = 0;
-        RDP_LIG_Utilities::handleUserAddToGroup($nGroupID,$authPass['access_token']);
         
         $sPostID = (isset($authPass['rdpingroupspostid']))? $authPass['rdpingroupspostid'] : 0;
         
@@ -87,32 +86,19 @@ class RDP_LIG_Login{
 
         do_action('rdp_lig_after_user_login', $this->_datapass);
 
-        $this->renderCloseScript($key,$nGroupID,$sPostID);
+        $this->renderCloseScript($nGroupID,$sPostID);
     }//__construct
     
     public function afterUserInsert($user){
         RDP_LIG_Company::handleCompaniesToFollow($this->_datapass);
-        
-        /* handle Groups To Join */
-        $access_token = $this->_datapass->access_token_get();
-        $options = get_option( RDP_LIG_PLUGIN::$options_name );
-        $text_string  = empty($options['sGroupsToJoin'])? '' : trim($options['sGroupsToJoin']);
-        if(empty($text_string))return;  
-        $str = preg_replace('#\s+#',',',$text_string); 
-        $oGroupIDs = explode(',', $str);
-        foreach($oGroupIDs as $nGroupID){
-            RDP_LIG_Utilities::handleUserAddToGroup($access_token,$nGroupID);
-        }        
     }//afterUserInsert
     
-    private function renderCloseScript($key,$nGroupID,$sPostID){
-        $cacheBuster = uniqid('', true);
-        
+    private function renderCloseScript($nGroupID,$sPostID){
         $JS = <<<EOS
 <script type='text/javascript'>
     function rdp_lig_login_onReady(){
         var baseURL = window.opener.location.protocol + "//" + window.opener.location.host + window.opener.location.pathname;
-        var params = jQuery.query.load(window.opener.location.href).REMOVE('rdpingroupsaction').SET('rdpingroupsid','{$nGroupID}').SET('rdpingroupskey','{$key}').SET('rdpingroupscb','{$cacheBuster}').SET('rdpingroupspostid','{$sPostID}');
+        var params = jQuery.query.load(window.opener.location.href).REMOVE('rdpingroupsaction').SET('rdpingroupsid','{$nGroupID}').SET('rdpingroupspostid','{$sPostID}');
 
         window.opener.location.href = baseURL+params;
         window.close();
