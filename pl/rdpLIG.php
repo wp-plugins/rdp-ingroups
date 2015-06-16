@@ -1,11 +1,6 @@
 <?php if ( ! defined('WP_CONTENT_DIR')) exit('No direct script access allowed'); ?>
 <?php
 
-/**
- * Description of rdpLIG
- *
- * @author Robert
- */
 class RDP_LIG {
     private $_key = '';
     private $_datapass = null;
@@ -101,7 +96,15 @@ class RDP_LIG {
             if($this->_datapass->submenuCode_get() == ''):
                 $imgSrc = $this->_datapass->pictureUrl_get();
                 $fullName = $this->_datapass->fullName_get();
+                $rdpingroupsid = 0;
+                $rdpingroupspostid = 0;
+                foreach($_GET as $query_string_variable => $value) {
+                    if($query_string_variable == 'rdpingroupsid')$rdpingroupsid = $value;
+                    if($query_string_variable == 'rdpingroupspostid')$rdpingroupspostid = $value;
+                }
                 $params = RDP_LIG_Utilities::clearQueryParams();
+                if(!empty($rdpingroupsid))$params['rdpingroupsid'] = $rdpingroupsid;
+                if(!empty($rdpingroupspostid))$params['rdpingroupspostid'] = $rdpingroupspostid;
                 $params['rdpingroupsaction'] = 'logout';
                 $url = add_query_arg($params);
                
@@ -534,8 +537,15 @@ EOD;
             RDP_LIG_DATAPASS::delete($datapass->key());            
         }
 
-
+        $rdpingroupsid = 0;
+        $rdpingroupspostid = 0;
+        foreach($_GET as $query_string_variable => $value) {
+            if($query_string_variable == 'rdpingroupsid')$rdpingroupsid = $value;
+            if($query_string_variable == 'rdpingroupspostid')$rdpingroupspostid = $value;
+        }
         $params = RDP_LIG_Utilities::clearQueryParams();
+        if(!empty($rdpingroupsid))$params['rdpingroupsid'] = $rdpingroupsid;
+        if(!empty($rdpingroupspostid))$params['rdpingroupspostid'] = $rdpingroupspostid;
         $url = add_query_arg($params);
         
         // log the user out of WP, as well
