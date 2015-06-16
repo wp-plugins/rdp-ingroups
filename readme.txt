@@ -3,7 +3,7 @@ Contributors: rpayne7264
 Tags: linkedin,linkedin groups,rdp linkedin,rdp groups+,rdp ingroups+,rdp linkedin groups,rdp linkedin groups+,ingroups+,
 Requires at least: 3.0
 Tested up to: 4.2.2
-Stable tag: 0.5.0
+Stable tag: 0.6.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,7 +35,7 @@ RDP inGroups+ provides:
 
 = Warning About Caching =
 
-This plug-in is intentionally coded to re-write hyperlinks with a cache-busting query string parameter so that the plug-in code is executed with every page load. Therefore, any sort of caching will be, effectively, disabled when using this plug-in.
+This plug-in will not work if caching is enabled on a web site.
 
 
 = Sponsor =
@@ -86,6 +86,10 @@ The auto-follow feature is a one-time process for each user who is registered wi
 
 
 == Frequently Asked Questions ==
+
+= So what does your plugin offer? =
+
+It'll pull content from publicly viewable groups by scrapping LinkedIn, with the content in both HTML format for display on a page and RSS format for displaying a feed.
 
 = How do I access the RSS feed designed for Mailchimp newsletters? =
 
@@ -139,7 +143,21 @@ To display a *Sign in with LinkedIn* button, use the [rdp-ingroups-login] shortc
 8. Settings page.
 9. Button to launch the shortcode embed helper form
 
+
 == Change Log ==
+
+= 0.6.1 =
+* modification to Sign Out links to continue displaying current group or discussion after log out
+
+= 0.6.0 =
+* removed code to re-write hyperlinks with a cache-busting query string parameter
+
+= 0.5.2 =
+* minor bug fixes
+* updated sign-in procedure to update usermeta table with current LinkedIn picture URL and public profile URL
+
+= 0.5.1 =
+* added ability to detect if BuddyPress is active
 
 = 0.5.0 =
 * Initial RC
