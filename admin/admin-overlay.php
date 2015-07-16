@@ -1,6 +1,6 @@
 <?php
 add_action( 'admin_footer', 'wikiembed_overlay_popup_form' );
-add_action( 'media_buttons_context', 'wikiembed_overlay_buttons' );
+add_action( 'media_buttons', 'wikiembed_overlay_buttons' );
 
 /**
  * wikiembed_overlay_buttons function.
@@ -9,18 +9,14 @@ add_action( 'media_buttons_context', 'wikiembed_overlay_buttons' );
  * @param mixed $context
  * @return void
  */
-function wikiembed_overlay_buttons( $context ) {
-	global $post, $pagenow;
-	
-	if ( in_array( $pagenow, array( "post.php", "post-new.php" ) ) && in_array( $post->post_type , array( "post", "page" ) ) ) {
-            $wiki_embed_overlay_image_button = plugins_url('/rdp-wiki-press-embed/resources/img/icon.png');
-	    $output_link = '<a href="#TB_inline?height=500&width=690&inlineId=wiki_embed_form" class="thickbox button" title="' .__("RDP Wiki-Press Embed", 'wiki-embed') . '" id="wiki-embed-overlay-button">';
-            $output_link .= '<span class="wp-media-buttons-icon" style="background: url('. $wiki_embed_overlay_image_button.'); background-repeat: no-repeat; background-position: left bottom;"/></span>';
-            $output_link .= '</a><style>#wiki_embed_form{ display:none;}</style>';
-	    return $context.$output_link;
-	} else {
-    	return $context;
-	}
+function wikiembed_overlay_buttons( $page = null, $target = null ) {
+    global $pagenow;
+    if ( !in_array( $pagenow, array( "post.php", "post-new.php" ) ))return;
+    $wiki_embed_overlay_image_button = plugins_url('/rdp-wiki-press-embed/resources/img/icon.png');
+    $output_link = '<a href="#TB_inline?height=500&width=690&inlineId=wiki_embed_form" class="thickbox button" title="' .__("RDP Wiki-Press Embed", 'wiki-embed') . '" id="wiki-embed-overlay-button">';
+    $output_link .= '<span class="wp-media-buttons-icon" style="background: url('. $wiki_embed_overlay_image_button.'); background-repeat: no-repeat; background-position: left bottom;"/></span>';
+    $output_link .= '</a><style>#wiki_embed_form{ display:none;}</style>';
+    echo $output_link;
 }
 
 /**
@@ -30,10 +26,10 @@ function wikiembed_overlay_buttons( $context ) {
  * @return void
  */
 function wikiembed_overlay_popup_form() {
-	global $wikiembed_object, $pagenow, $post;
+    global $wikiembed_object, $pagenow, $post;
+    if ( !in_array( $pagenow, array( "post.php", "post-new.php" ) ))return;        
 	$wikiembed_options = $wikiembed_object->options;
 	
-	if ( in_array( $pagenow, array( "post.php", "post-new.php" ) ) && in_array( $post->post_type , array( "post", "page" ) ) ) {
             wp_enqueue_script('wiki-embed-admin-overlay', plugins_url( '/admin/js/script.admin-overlay.js',RDP_WE_PLUGIN_BASENAME), array("jquery","jquery-ui-tabs"), '1.0', true);
             $params = array(
                             'pp_button_text' => (PPE_CTA_BUTTON_TEXT != $wikiembed_options['ppe-cta-button-text'])? $wikiembed_options['ppe-cta-button-text'] : PPE_CTA_BUTTON_TEXT,
@@ -160,21 +156,21 @@ function wikiembed_overlay_popup_form() {
                                     <tr>
                                         <th valign="top" class="label" scope="row"></th>
                                         <td class="field">
-                                            <input type="checkbox" aria-required="true" value="1" name="pp-embed-display-image" id="pp-embed-display-image" checked="checked" /> <span style="margin-right: 8px;"><label for="pp-embed-display-image"> Display cover image</label></span>
-                                            <input type="checkbox" aria-required="true" value="1" name="pp-embed-display-title" id="pp-embed-display-title" checked="checked" /> <span style="margin-right: 8px;"><label for="pp-embed-display-title"> Display title</label></span>                                            
-                                            <input type="checkbox" aria-required="true" value="1" name="pp-embed-display-subtitle" id="pp-embed-display-subtitle" checked="checked" /> <span><label for="pp-embed-display-subtitle"> Display subtitle</label></span>
+                                            <input type="checkbox" aria-required="true" value="1" name="pp-embed-display-image" id="pp-embed-display-image" checked="checked" /> <span style="margin-right: 8px;"><label for="pp-embed-display-image"> <?php _e('Display cover image', 'wiki-embed'); ?></label></span>
+                                            <input type="checkbox" aria-required="true" value="1" name="pp-embed-display-title" id="pp-embed-display-title" checked="checked" /> <span style="margin-right: 8px;"><label for="pp-embed-display-title"> <?php _e('Display title', 'wiki-embed'); ?></label></span>                                            
+                                            <input type="checkbox" aria-required="true" value="1" name="pp-embed-display-subtitle" id="pp-embed-display-subtitle" checked="checked" /> <span><label for="pp-embed-display-subtitle"> <?php _e('Display subtitle', 'wiki-embed'); ?></label></span>
                                             <div></div>
-                                            <input type="checkbox" aria-required="true" value="1" name="pp-embed-display-editor" id="pp-embed-display-editor" checked="checked" /> <span  style="margin-right: 8px;"><label for="pp-embed-display-editor"> Display editor</label></span>
-                                            <input type="checkbox" aria-required="true" value="1" name="pp-embed-display-language" id="pp-embed-display-language" checked="checked" /> <span style="margin-right: 8px;"><label for="pp-embed-display-language"> Display language</label></span>
-                                            <input type="checkbox" aria-required="true" value="1" name="pp-embed-display-atc" id="pp-embed-display-atc" checked="checked" /> <span ><label for="pp-embed-display-atc"> Display Add-to-Cart button</label></span>                                        
+                                            <input type="checkbox" aria-required="true" value="1" name="pp-embed-display-editor" id="pp-embed-display-editor" checked="checked" /> <span  style="margin-right: 8px;"><label for="pp-embed-display-editor"> <?php _e('Display editor', 'wiki-embed'); ?></label></span>
+                                            <input type="checkbox" aria-required="true" value="1" name="pp-embed-display-language" id="pp-embed-display-language" checked="checked" /> <span style="margin-right: 8px;"><label for="pp-embed-display-language"> <?php _e('Display language', 'wiki-embed'); ?></label></span>
+                                            <input type="checkbox" aria-required="true" value="1" name="pp-embed-display-atc" id="pp-embed-display-atc" checked="checked" /> <span ><label for="pp-embed-display-atc"> <?php _e('Display Add-to-Cart button', 'wiki-embed'); ?></label></span>                                        
                                             <div></div>
-                                            <input type="checkbox" aria-required="true" value="1" name="pp-embed-display-book-size" id="pp-embed-display-book-size" checked="checked" /> <span  style="margin-right: 8px;"><label for="pp-embed-display-book-size"> Display book size</label></span>
+                                            <input type="checkbox" aria-required="true" value="1" name="pp-embed-display-book-size" id="pp-embed-display-book-size" checked="checked" /> <span  style="margin-right: 8px;"><label for="pp-embed-display-book-size"> <?php _e('Display book size', 'wiki-embed'); ?></label></span>
                                         </td>                                        
                                     </tr>
                                     <tr>
                                         <th valign="top" class="label" scope="row"></th>
                                         <td class="field">
-                                            <h3>CTA Button Settings</h3>
+                                            <h3><?php _e('CTA Button Settings', 'wiki-embed'); ?></h3>
                                             <label for="ppe-cta-button-content">Popup Content (shortcode/text/HTML)</label><br />
                                             <?php
                                                 $sPPDownloadButtonContent = empty($wikiembed_options['ppe-cta-button-content'])? '' : $wikiembed_options['ppe-cta-button-content'];
@@ -187,7 +183,7 @@ function wikiembed_overlay_popup_form() {
                                     <tr>
                                         <th valign="top" class="label" scope="row"></th>
                                         <td class="field">
-                                            <label for="ppe-cta-button-text">Button Text</label><br />
+                                            <label for="ppe-cta-button-text"><?php _e('Button Text', 'wiki-embed'); ?></label><br />
                                             <?php
                                                 $sPPDownloadButtonText = empty($wikiembed_options['ppe-cta-button-text'])? PPE_CTA_BUTTON_TEXT : $wikiembed_options['ppe-cta-button-text'];
                                                 $sPPDownloadButtonText = esc_attr($sPPDownloadButtonText);
@@ -201,7 +197,7 @@ function wikiembed_overlay_popup_form() {
                                         <?php 
                                             $sPPDownloadButtonWidth = ( isset( $wikiembed_options['ppe-cta-button-width'] ) ) ? $wikiembed_options['ppe-cta-button-width'] : PPE_CTA_BUTTON_WIDTH;
                                         ?>
-                                        <span style="width: 150px;display: inline-block;">Width:</span> <input type="text" id="ppe-cta-button-width" value="<?php echo $sPPDownloadButtonWidth ?>"  style="width: 50px;"/> pixels
+                                        <span style="width: 150px;display: inline-block;"><?php _e('Width', 'wiki-embed'); ?>:</span> <input type="text" id="ppe-cta-button-width" value="<?php echo $sPPDownloadButtonWidth ?>"  style="width: 50px;"/> pixels
                                         <p style="margin-top: 0;text-align: center;">(max: 500) or <em>auto</em> for normal auto sizing</p>                                  
                                     </td>
                                 </tr>                                
@@ -211,7 +207,7 @@ function wikiembed_overlay_popup_form() {
                                         <?php 
                                             $bgTopColor = ( isset( $wikiembed_options['ppe-cta-button-top-color'] ) ) ? $wikiembed_options['ppe-cta-button-top-color'] : PPE_CTA_BUTTON_TOP_COLOR;
                                         ?>
-                                        <span style="width: 150px;display: inline-block;">Top Color:</span> <input type="text" id="ppe-cta-button-top-color" class="bgTopColor rdp-we-color-picker" data-default-color="<?php echo PPE_CTA_BUTTON_TOP_COLOR  ?>" value="<?php echo $bgTopColor ?>" />                                        
+                                        <span style="width: 150px;display: inline-block;"><?php _e('Top Color', 'wiki-embed'); ?>:</span> <input type="text" id="ppe-cta-button-top-color" class="bgTopColor rdp-we-color-picker" data-default-color="<?php echo PPE_CTA_BUTTON_TOP_COLOR  ?>" value="<?php echo $bgTopColor ?>" />                                        
                                     </td>
                                 </tr>
                                 <tr>
@@ -220,7 +216,7 @@ function wikiembed_overlay_popup_form() {
                                         <?php 
                                             $bgBottomColor = ( isset( $wikiembed_options['ppe-cta-button-bottom-color'] ) ) ? $wikiembed_options['ppe-cta-button-bottom-color'] : PPE_CTA_BUTTON_BOTTOM_COLOR;
                                         ?>
-                                        <span style="width: 150px;display: inline-block;">Bottom Color:</span> <input type="text" id="ppe-cta-button-bottom-color" class="bgBottomColor rdp-we-color-picker" data-default-color="<?php echo PPE_CTA_BUTTON_BOTTOM_COLOR  ?>" value="<?php echo $bgBottomColor ?>" />                                        
+                                        <span style="width: 150px;display: inline-block;"><?php _e('Bottom Color', 'wiki-embed'); ?>:</span> <input type="text" id="ppe-cta-button-bottom-color" class="bgBottomColor rdp-we-color-picker" data-default-color="<?php echo PPE_CTA_BUTTON_BOTTOM_COLOR  ?>" value="<?php echo $bgBottomColor ?>" />                                        
                                     </td>
                                 </tr>
                                 <tr>
@@ -229,7 +225,7 @@ function wikiembed_overlay_popup_form() {
                                         <?php 
                                             $fontColor = ( isset( $wikiembed_options['ppe-cta-button-font-color'] ) ) ? $wikiembed_options['ppe-cta-button-font-color'] : PPE_CTA_BUTTON_FONT_COLOR;
                                         ?>
-                                        <span style="width: 150px;display: inline-block;">Font Color:</span> <input type="text" id="ppe-cta-button-font-color" class="fontColor rdp-we-color-picker" data-default-color="<?php echo PPE_CTA_BUTTON_FONT_COLOR  ?>" value="<?php echo $fontColor ?>" />                                        
+                                        <span style="width: 150px;display: inline-block;"><?php _e('Font Color', 'wiki-embed'); ?>:</span> <input type="text" id="ppe-cta-button-font-color" class="fontColor rdp-we-color-picker" data-default-color="<?php echo PPE_CTA_BUTTON_FONT_COLOR  ?>" value="<?php echo $fontColor ?>" />                                        
                                     </td>
                                 </tr> 
                                 <tr>
@@ -238,7 +234,7 @@ function wikiembed_overlay_popup_form() {
                                         <?php 
                                             $fontHoverColor = ( isset( $wikiembed_options['ppe-cta-button-font-hover-color'] ) ) ? $wikiembed_options['ppe-cta-button-font-hover-color'] : PPE_CTA_BUTTON_FONT_HOVER_COLOR;
                                         ?>
-                                        <span style="width: 150px;display: inline-block;">Font Hover Color:</span> <input type="text" id="ppe-cta-button-font-hover-color" class="fontHoverColor rdp-we-color-picker" data-default-color="<?php echo PPE_CTA_BUTTON_FONT_HOVER_COLOR  ?>" value="<?php echo $fontHoverColor ?>" />                                        
+                                        <span style="width: 150px;display: inline-block;"><?php _e('Font Hover Color', 'wiki-embed'); ?>:</span> <input type="text" id="ppe-cta-button-font-hover-color" class="fontHoverColor rdp-we-color-picker" data-default-color="<?php echo PPE_CTA_BUTTON_FONT_HOVER_COLOR  ?>" value="<?php echo $fontHoverColor ?>" />                                        
                                     </td>
                                 </tr>  
                                 <tr>
@@ -247,7 +243,7 @@ function wikiembed_overlay_popup_form() {
                                         <?php 
                                             $borderColor = ( isset( $wikiembed_options['ppe-cta-button-border-color'] ) ) ? $wikiembed_options['ppe-cta-button-border-color'] : PPE_CTA_BUTTON_BORDER_COLOR;
                                         ?>
-                                        <span style="width: 150px;display: inline-block;">Border Color:</span> <input type="text" id="ppe-cta-button-border-color" class="borderColor rdp-we-color-picker" data-default-color="<?php echo PPE_CTA_BUTTON_BORDER_COLOR  ?>" value="<?php echo $borderColor ?>" />                                        
+                                        <span style="width: 150px;display: inline-block;"><?php _e('Border Color', 'wiki-embed'); ?>:</span> <input type="text" id="ppe-cta-button-border-color" class="borderColor rdp-we-color-picker" data-default-color="<?php echo PPE_CTA_BUTTON_BORDER_COLOR  ?>" value="<?php echo $borderColor ?>" />                                        
                                     </td>
                                 </tr> 
                                 <tr>
@@ -256,7 +252,7 @@ function wikiembed_overlay_popup_form() {
                                         <?php 
                                             $boxShadowColor = ( isset( $wikiembed_options['ppe-cta-button-box-shadow-color'] ) ) ? $wikiembed_options['ppe-cta-button-box-shadow-color'] : PPE_CTA_BUTTON_BOX_SHADOW_COLOR;
                                         ?>
-                                        <span style="width: 150px;display: inline-block;">Button Shadow Color:</span> <input type="text" id="ppe-cta-button-box-shadow-color" class="boxShadowColor rdp-we-color-picker" data-default-color="<?php echo PPE_CTA_BUTTON_BOX_SHADOW_COLOR  ?>" value="<?php echo $boxShadowColor ?>" />                                        
+                                        <span style="width: 150px;display: inline-block;"><?php _e('Button Shadow Color', 'wiki-embed'); ?>:</span> <input type="text" id="ppe-cta-button-box-shadow-color" class="boxShadowColor rdp-we-color-picker" data-default-color="<?php echo PPE_CTA_BUTTON_BOX_SHADOW_COLOR  ?>" value="<?php echo $boxShadowColor ?>" />                                        
                                     </td>
                                 </tr> 
                                 <tr>
@@ -265,7 +261,7 @@ function wikiembed_overlay_popup_form() {
                                         <?php 
                                             $textShadowColor = ( isset( $wikiembed_options['ppe-cta-button-text-shadow-color'] ) ) ? $wikiembed_options['ppe-cta-button-text-shadow-color'] : PPE_CTA_BUTTON_TEXT_SHADOW_COLOR;
                                         ?>
-                                        <span style="width: 150px;display: inline-block;">Text Shadow Color:</span> <input type="text" id="ppe-cta-button-text-shadow-color" class="textShadowColor rdp-we-color-picker" data-default-color="<?php echo PPE_CTA_BUTTON_TEXT_SHADOW_COLOR  ?>" value="<?php echo $textShadowColor ?>" />                                        
+                                        <span style="width: 150px;display: inline-block;"><?php _e('Text Shadow Color', 'wiki-embed'); ?>:</span> <input type="text" id="ppe-cta-button-text-shadow-color" class="textShadowColor rdp-we-color-picker" data-default-color="<?php echo PPE_CTA_BUTTON_TEXT_SHADOW_COLOR  ?>" value="<?php echo $textShadowColor ?>" />                                        
                                     </td>
                                 </tr>                                     
                                     <tr>
@@ -297,7 +293,19 @@ function wikiembed_overlay_popup_form() {
                                                 <span class="alignright"><abbr class="required" title="required" id="status_img">*</abbr></span>
                                         </th>
                                         <td class="field"><input type="text" aria-required="true" value="10" name="pp-gallery-num" id="pp-gallery-num" style="width: 30px;"></td>
-                                    </tr> 
+                                    </tr>
+                                    <tr>
+                                        <th valign="top" class="label" scope="row" style="width: 200px;">
+                                                <span class="alignleft"><label for="pp-gallery-size"><?php _e('Gallery Style', 'wiki-embed'); ?></label></span>
+                                        </th>
+                                        <td class="field">
+                                            <select id="pp-gallery-size">
+                                                <option selected="selected" value="small">Small</option>
+                                                <option value="medium">Medium</option>
+                                                <option value="large">Large</option>
+                                            </select>
+                                        </td>
+                                    </tr>                                    
                                     <tr>
                                         <th valign="top" class="label" scope="row" style="width: 200px;">
                                                 <span class="alignleft"><label for="pp-gallery-categories"><?php _e('Target Categories', 'wiki-embed'); ?></label></span>
@@ -357,8 +365,8 @@ function wikiembed_overlay_popup_form() {
                                     <tr>
                                         <th valign="top" class="label" scope="row"></th>
                                         <td class="field">
-                                            <h3>CTA Button Settings</h3>
-                                            <label for="ppegallery-cta-button-content">Popup Content (shortcode/text/HTML)</label><br />
+                                            <h3><?php _e('CTA Button Settings', 'wiki-embed'); ?></h3>
+                                            <label for="ppegallery-cta-button-content"><?php _e('Popup Content (shortcode/text/HTML)', 'wiki-embed'); ?></label><br />
                                             <?php
                                                 $sPPDownloadButtonContent = empty($wikiembed_options['ppe-cta-button-content'])? '' : $wikiembed_options['ppe-cta-button-content'];
                                                 $sPPDownloadButtonContent = esc_textarea($sPPDownloadButtonContent);
@@ -369,7 +377,7 @@ function wikiembed_overlay_popup_form() {
                                     <tr>
                                         <th valign="top" class="label" scope="row" style="width: 200px;"></th>
                                         <td class="field">
-                                            <label for="ppegallery-cta-button-text">CTA Button Text</label>
+                                            <label for="ppegallery-cta-button-text"><?php _e('CTA Button Text', 'wiki-embed'); ?></label>
                                             <?php
                                                 $sPPDownloadButtonText = empty($wikiembed_options['ppe-cta-button-text'])? PPE_CTA_BUTTON_TEXT : $wikiembed_options['ppe-cta-button-text'];
                                                 $sPPDownloadButtonText = esc_attr($sPPDownloadButtonText);
@@ -383,7 +391,7 @@ function wikiembed_overlay_popup_form() {
                                         <?php 
                                             $bgTopColor = ( isset( $wikiembed_options['ppe-cta-button-top-color'] ) ) ? $wikiembed_options['ppe-cta-button-top-color'] : PPE_CTA_BUTTON_TOP_COLOR;
                                         ?>
-                                        <span style="width: 150px;display: inline-block;">Top Color:</span> <input type="text" id="ppegallery-cta-button-top-color" class="bgTopColor rdp-we-color-picker" data-default-color="<?php echo PPE_CTA_BUTTON_TOP_COLOR  ?>" value="<?php echo $bgTopColor ?>" />                                        
+                                        <span style="width: 150px;display: inline-block;"><?php _e('Top Color', 'wiki-embed'); ?>:</span> <input type="text" id="ppegallery-cta-button-top-color" class="bgTopColor rdp-we-color-picker" data-default-color="<?php echo PPE_CTA_BUTTON_TOP_COLOR  ?>" value="<?php echo $bgTopColor ?>" />                                        
                                     </td>
                                 </tr>
                                 <tr>
@@ -392,7 +400,7 @@ function wikiembed_overlay_popup_form() {
                                         <?php 
                                             $bgBottomColor = ( isset( $wikiembed_options['ppe-cta-button-bottom-color'] ) ) ? $wikiembed_options['ppe-cta-button-bottom-color'] : PPE_CTA_BUTTON_BOTTOM_COLOR;
                                         ?>
-                                        <span style="width: 150px;display: inline-block;">Bottom Color:</span> <input type="text" id="ppegallery-cta-button-bottom-color" class="bgBottomColor rdp-we-color-picker" data-default-color="<?php echo PPE_CTA_BUTTON_BOTTOM_COLOR  ?>" value="<?php echo $bgBottomColor ?>" />                                        
+                                        <span style="width: 150px;display: inline-block;"><?php _e('Bottom Color', 'wiki-embed'); ?>:</span> <input type="text" id="ppegallery-cta-button-bottom-color" class="bgBottomColor rdp-we-color-picker" data-default-color="<?php echo PPE_CTA_BUTTON_BOTTOM_COLOR  ?>" value="<?php echo $bgBottomColor ?>" />                                        
                                     </td>
                                 </tr>
                                 <tr>
@@ -401,7 +409,7 @@ function wikiembed_overlay_popup_form() {
                                         <?php 
                                             $fontColor = ( isset( $wikiembed_options['ppe-cta-button-font-color'] ) ) ? $wikiembed_options['ppe-cta-button-font-color'] : PPE_CTA_BUTTON_FONT_COLOR;
                                         ?>
-                                        <span style="width: 150px;display: inline-block;">Font Color:</span> <input type="text" id="ppegallery-cta-button-font-color" class="fontColor rdp-we-color-picker" data-default-color="<?php echo PPE_CTA_BUTTON_FONT_COLOR  ?>" value="<?php echo $fontColor ?>" />                                        
+                                        <span style="width: 150px;display: inline-block;"><?php _e('Font Color', 'wiki-embed'); ?>:</span> <input type="text" id="ppegallery-cta-button-font-color" class="fontColor rdp-we-color-picker" data-default-color="<?php echo PPE_CTA_BUTTON_FONT_COLOR  ?>" value="<?php echo $fontColor ?>" />                                        
                                     </td>
                                 </tr> 
                                 <tr>
@@ -410,7 +418,7 @@ function wikiembed_overlay_popup_form() {
                                         <?php 
                                             $fontHoverColor = ( isset( $wikiembed_options['ppe-cta-button-font-hover-color'] ) ) ? $wikiembed_options['ppe-cta-button-font-hover-color'] : PPE_CTA_BUTTON_FONT_HOVER_COLOR;
                                         ?>
-                                        <span style="width: 150px;display: inline-block;">Font Hover Color:</span> <input type="text" id="ppegallery-cta-button-font-hover-color" class="fontHoverColor rdp-we-color-picker" data-default-color="<?php echo PPE_CTA_BUTTON_FONT_HOVER_COLOR  ?>" value="<?php echo $fontHoverColor ?>" />                                        
+                                        <span style="width: 150px;display: inline-block;"><?php _e('Font Hover Color', 'wiki-embed'); ?>:</span> <input type="text" id="ppegallery-cta-button-font-hover-color" class="fontHoverColor rdp-we-color-picker" data-default-color="<?php echo PPE_CTA_BUTTON_FONT_HOVER_COLOR  ?>" value="<?php echo $fontHoverColor ?>" />                                        
                                     </td>
                                 </tr>  
                                 <tr>
@@ -419,7 +427,7 @@ function wikiembed_overlay_popup_form() {
                                         <?php 
                                             $borderColor = ( isset( $wikiembed_options['ppe-cta-button-border-color'] ) ) ? $wikiembed_options['ppe-cta-button-border-color'] : PPE_CTA_BUTTON_BORDER_COLOR;
                                         ?>
-                                        <span style="width: 150px;display: inline-block;">Border Color:</span> <input type="text" id="ppegallery-cta-button-border-color" class="borderColor rdp-we-color-picker" data-default-color="<?php echo PPE_CTA_BUTTON_BORDER_COLOR  ?>" value="<?php echo $borderColor ?>" />                                        
+                                        <span style="width: 150px;display: inline-block;"><?php _e('Border Color', 'wiki-embed'); ?>:</span> <input type="text" id="ppegallery-cta-button-border-color" class="borderColor rdp-we-color-picker" data-default-color="<?php echo PPE_CTA_BUTTON_BORDER_COLOR  ?>" value="<?php echo $borderColor ?>" />                                        
                                     </td>
                                 </tr> 
                                 <tr>
@@ -428,7 +436,7 @@ function wikiembed_overlay_popup_form() {
                                         <?php 
                                             $boxShadowColor = ( isset( $wikiembed_options['ppe-cta-button-box-shadow-color'] ) ) ? $wikiembed_options['ppe-cta-button-box-shadow-color'] : PPE_CTA_BUTTON_BOX_SHADOW_COLOR;
                                         ?>
-                                        <span style="width: 150px;display: inline-block;">Button Shadow Color:</span> <input type="text" id="ppegallery-cta-button-box-shadow-color" class="boxShadowColor rdp-we-color-picker" data-default-color="<?php echo PPE_CTA_BUTTON_BOX_SHADOW_COLOR  ?>" value="<?php echo $boxShadowColor ?>" />                                        
+                                        <span style="width: 150px;display: inline-block;"><?php _e('Button Shadow Color', 'wiki-embed'); ?>:</span> <input type="text" id="ppegallery-cta-button-box-shadow-color" class="boxShadowColor rdp-we-color-picker" data-default-color="<?php echo PPE_CTA_BUTTON_BOX_SHADOW_COLOR  ?>" value="<?php echo $boxShadowColor ?>" />                                        
                                     </td>
                                 </tr> 
                                 <tr>
@@ -437,7 +445,7 @@ function wikiembed_overlay_popup_form() {
                                         <?php 
                                             $textShadowColor = ( isset( $wikiembed_options['ppe-cta-button-text-shadow-color'] ) ) ? $wikiembed_options['ppe-cta-button-text-shadow-color'] : PPE_CTA_BUTTON_TEXT_SHADOW_COLOR;
                                         ?>
-                                        <span style="width: 150px;display: inline-block;">Text Shadow Color:</span> <input type="text" id="ppegallery-cta-button-text-shadow-color" class="textShadowColor rdp-we-color-picker" data-default-color="<?php echo PPE_CTA_BUTTON_TEXT_SHADOW_COLOR  ?>" value="<?php echo $textShadowColor ?>" />                                        
+                                        <span style="width: 150px;display: inline-block;"><?php _e('Text Shadow Color', 'wiki-embed'); ?>:</span> <input type="text" id="ppegallery-cta-button-text-shadow-color" class="textShadowColor rdp-we-color-picker" data-default-color="<?php echo PPE_CTA_BUTTON_TEXT_SHADOW_COLOR  ?>" value="<?php echo $textShadowColor ?>" />                                        
                                     </td>
                                 </tr>                                     
                                     <tr>
@@ -454,5 +462,5 @@ function wikiembed_overlay_popup_form() {
                     </div><!-- wiki-embed-tabs -->
 		</div><!-- end #wiki_embed_form -->
 		<?php
-	}
+
 }

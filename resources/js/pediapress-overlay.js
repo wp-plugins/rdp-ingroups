@@ -6,7 +6,7 @@ $j(document).ready(rdp_pp_overlay_onReady);
 function rdp_pp_overlay_onReady(){
     $j('#mainContent .ready').removeClass('invisible');
 
-    if(typeof rdp_we_ppe == 'undefined'){
+    if(rdp_we_ppe.has_content == 0){
         $j(".ppe-cover-link").colorbox({iframe:true, innerWidth: 960, innerHeight:"80%",transition:"none"})
         $j(".ppe-add-to-cart").colorbox({iframe:true, innerWidth: 960, innerHeight:"80%",transition:"none"})
     }else{

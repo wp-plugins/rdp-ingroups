@@ -1,14 +1,29 @@
 /* Overlay JS needed */
 jQuery(document).ready(function ($) {
-		$(".wiki-embed-overlay a:not(.external,.new,sup.reference a,.wiki-embed-tabs-nav a, h2 a, #toc a, .image,a[href$='.pdf'])").click(function() {
+		$(".wiki-embed-overlay a:not(.external,.new,sup.reference a,.wiki-embed-tabs-nav a, h2 a, #toc a, a[href$='.pdf'])").click(function() {
+                        var sHREF = $(this).attr('href');        
+                        if(typeof sHREF == 'undefined')return true;  
+                        if($(this).hasClass('image') && sHREF.indexOf('/File:') == -1)return true; 
+                        
+                        var title = $.URLEncode(this.innerHTML);
+                        if($(this).hasClass('image') && sHREF.indexOf('/File:') != -1){
+                            var srcset = $('img.thumbimage',this).attr('srcset');
+                            var srcs = srcset.split(',');
+                            var baseTarget = url('protocol', sHREF) + "://" + url('hostname', sHREF);
+                            var newsrc = srcs[srcs.length-1];
+                            newsrc = newsrc.substr(0, newsrc.lastIndexOf(' '));
+                            newsrc = baseTarget.trim()+newsrc.trim();
+                            title = $.URLEncode('<img src="'+newsrc+'" style="width: auto;" />');
+                        }
+                        
+                        
+			var oURL = this.href.split("#");
 			
-			var url = this.href.split("#");
-			
-			if( url[1] ){
-				var encoded_url = $.URLEncode(url[0]);
-				var hash = "#"+url[1];
+			if( oURL[1] ){
+				var encoded_url = $.URLEncode(oURL[0]);
+				var hash = "#"+oURL[1];
 			}else{
-				var encoded_url = $.URLEncode(url[0]);
+				var encoded_url = $.URLEncode(oURL[0]);
 				var hash ="";
 			}
 
@@ -20,7 +35,7 @@ jQuery(document).ready(function ($) {
 				iframe: true, 
 				innerWidth: 900, 
 				innerHeight: "80%",
-				href: WikiEmbedSettings.ajaxurl+"?url="+encoded_url+"&action=wiki_embed&title="+$.URLEncode(this.innerHTML)+remove+hash,
+				href: WikiEmbedSettings.ajaxurl+"?url="+encoded_url+"&action=wiki_embed&title="+title+remove+hash,
 				transition:"none",
 				onLoad: function () { $('#colorbox').show(); }
 				});
