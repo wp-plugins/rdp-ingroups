@@ -230,8 +230,6 @@ class RDP_LIG_Group {
         $params = RDP_LIG_Utilities::clearQueryParams();
         $params['rdpingroupspostid'] = $Post->id;
         $params['rdpingroupsid'] = $gid;       
-        $params['rdpingroupscb'] = uniqid('', true); 
-        $params['rdpingroupskey'] = $Datapass->key(); 
         $url = add_query_arg($params,$url);  
         $sHTML .= '<h3>';
         if($fTruncate)$sHTML .= '<a href="' . $url . '" target="_new" class="rdp-lig-post-link" postid="' . $Post->id . '" >';

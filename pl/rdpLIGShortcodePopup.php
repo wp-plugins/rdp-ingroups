@@ -1,18 +1,13 @@
 <?php
 
 class RDP_LIG_Shortcode_Popup {
-    public static function addMediaButton($context){
-	global $post, $pagenow;
-	
-	if ( in_array( $pagenow, array( "post.php", "post-new.php" ) ) && in_array( $post->post_type , array( "post", "page" ) ) ) {
+    public static function addMediaButton($page = null, $target = null){
             $rdp_lig_button_src = plugins_url('/images/linkedin.ico', __FILE__);
 	    $output_link = '<a href="#TB_inline?width=400&inlineId=rdp-lig-shortcode-popup" class="thickbox button" title="inGroups+" id="rdp-lig-shortcode-button">';
             $output_link .= '<span class="wp-media-buttons-icon" style="background: url('. $rdp_lig_button_src.'); background-repeat: no-repeat; background-position: left bottom;"/></span>';
             $output_link .= '</a>';
-            return $context.$output_link;
-	} else {
-            return $context;
-	}        
+            echo $output_link;
+      
     }//addMediaButton
     
     public static function renderPopupForm(){

@@ -64,7 +64,11 @@ class RDP_LIG_Utilities {
     static function handleUserRegistration($user){
         $userID = username_exists( $user->emailAddress );
         $userID = apply_filters( 'rdp_lig_before_insert_user', $userID, $user );
-        if (is_numeric($userID)) return true;
+        if (is_numeric($userID)){
+            update_user_meta($userID, 'rdp_lig_public_profile_url', $user->publicProfileUrl);
+            update_user_meta($userID, 'rdp_lig_picture_url', $user->pictureUrl);            
+            return true;
+        }
 
         $userdata = array(
             'user_login'    =>  $user->emailAddress,
@@ -72,6 +76,7 @@ class RDP_LIG_Utilities {
             'first_name'    =>  $user->firstName,
             'last_name'    =>  $user->lastName,
             'user_email' => $user->emailAddress,
+            'user_url'  =>  $user->publicProfileUrl,           
             'show_admin_bar_front' => 'false',
             'display_name' => trim($user->firstName.' '.$user->lastName)
             );            
@@ -81,6 +86,7 @@ class RDP_LIG_Utilities {
         if( !is_wp_error($userID) ) {
             $wp_user = get_user_by( 'id', $userID );
             update_user_meta($userID, 'rdp_lig_public_profile_url', $user->publicProfileUrl);
+            update_user_meta($userID, 'rdp_lig_picture_url', $user->pictureUrl);
             $RV = true;
             do_action('rdp_lig_after_insert_user', $wp_user);
         }         
@@ -103,31 +109,20 @@ class RDP_LIG_Utilities {
 
     }//handleRegisteredUserSignOn
     
-    static function handleUserAddToGroup($access_token,$nGroupID = 0){
-        if(empty($nGroupID))return false;
-        if(!is_numeric($nGroupID))return false;
-        $args = array(
-                    'method'=> 'PUT',
-                    'headers' => array('Content-Type' => 'text/xml'),
-                    'body' => "<?xml version='1.0' encoding='UTF-8'?><group-membership><membership-state><code>member</code></membership-state></group-membership>"
-                );
-        $params = array('oauth2_access_token' => $access_token);
-        $resource = "https://api.linkedin.com/v1/people/~/group-memberships/{$nGroupID}?" . http_build_query($params);        
-        $response = wp_remote_post( $resource, $args); 
-        $code = $response['response']['code'];
-        $body = wp_remote_retrieve_body($response);
-        $RV = ($code == '201');
-        return $RV;
-  
-    }//handleUserAddToGroup
-    
     static function tweakAdminBar() {
         global $wp_admin_bar;
         $logout_node = $wp_admin_bar->get_node( 'logout' );
         $wp_admin_bar->remove_node( 'logout' );
+        $rdpingroupsid = 0;
+        $rdpingroupspostid = 0;
+        foreach($_GET as $query_string_variable => $value) {
+            if($query_string_variable == 'rdpingroupsid')$rdpingroupsid = $value;
+            if($query_string_variable == 'rdpingroupspostid')$rdpingroupspostid = $value;
+        }
         $params = RDP_LIG_Utilities::clearQueryParams();
+        if(!empty($rdpingroupsid))$params['rdpingroupsid'] = $rdpingroupsid;
+        if(!empty($rdpingroupspostid))$params['rdpingroupspostid'] = $rdpingroupspostid;
         $params['rdpingroupsaction'] = 'logout';
-        $params['rdpingroupscb'] = uniqid('', true);
         $url = add_query_arg($params);
         $logout_node->href = $url;
         $wp_admin_bar->add_node( $logout_node);
@@ -345,7 +340,10 @@ class RDP_LIG_Utilities {
         $rv = false;
         switch ($input){
             case "we": 
-                if (strpos($active, "rdp-wiki-press-embed")) $rv = true;
+                if (strpos($active, "rdp-wiki-press-embed") !== FALSE) $rv = true;
+                break;             
+            case "bp": 
+                if (strpos($active, "buddypress") !== FALSE) $rv = true;
                 break;             
         }//switch
         

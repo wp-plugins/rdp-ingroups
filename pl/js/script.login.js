@@ -13,13 +13,13 @@ function rdp_lig_login_onReady(){
 }
 
 function rdp_lig_clean_links(){
-    $j('#rdp-lig-main .discussion-item-list a').addClass( "btnLGILogin" ).removeAttr('href');    
-    $j('#rdp-lig-main .top-bar .image-wrapper').addClass( "btnLGILogin" ).removeAttr('href');
-    $j('#rdp-lig-main .top-bar .parent-group a').addClass( "btnLGILogin" ).removeAttr('href');
+    $j('#rdp-lig-main .discussion-item-list a').addClass( "btnLGILogin" ).removeAttr('href').removeAttr('target');    
+    $j('#rdp-lig-main .top-bar .image-wrapper').addClass( "btnLGILogin" ).removeAttr('href').removeAttr('target');
+    $j('#rdp-lig-main .top-bar .parent-group a').addClass( "btnLGILogin" ).removeAttr('href').removeAttr('target');
     $j('#rdp-lig-main .referenced-item a').addClass( "btnLGILogin" ).removeAttr('href').removeAttr('target');    
-    $j('#rdp-lig-main .entity a').addClass( "btnLGILogin" ).removeAttr('href');
-    $j('#rdp-lig-main a.poster').addClass( "btnLGILogin" ).removeAttr('href');
-    $j('#rdp-lig-main a.discussion-title').addClass( "btnLGILogin" ).removeAttr('href');
+    $j('#rdp-lig-main .entity a').addClass( "btnLGILogin" ).removeAttr('href').removeAttr('target');
+    $j('#rdp-lig-main a.poster').addClass( "btnLGILogin" ).removeAttr('href').removeAttr('target');
+    $j('#rdp-lig-main a.discussion-title').addClass( "btnLGILogin" ).removeAttr('href').removeAttr('target');
     $j('#rdp-lig-main .media-block a').addClass( "rdp-lig-pre-login-group" );  
     $j('#rdp-lig-main .media-block a').each(function( index ) {
         var str = $j(this).attr('href');
@@ -32,7 +32,7 @@ function rdp_lig_clean_links(){
 
 function rdp_lig_login_showPopup(e){
     if(e){
-        var target = rdp_lig_get_source_element(e.target);
+        var target = rdp_lig_get_source_element(e);
         var postID = (typeof $j(target).attr('postid') == 'undefined')? jQuery.query.get('rdpingroupspostid') : $j(target).attr('postid'); 
     }
     var sURL = rdp_lig_login.loginurl;
