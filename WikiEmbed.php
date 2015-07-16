@@ -3,7 +3,7 @@
  * Plugin Name: RDP Wiki-Press Embed
  * Plugin URI: http://www.robert-d-payne.com/
  * Description: Enables the inclusion of MediaWiki pages and PediaPress book pages into your own blog page or post through the use of shortcodes. Forked from: <a href="http://wordpress.org/plugins/rdp-wiki-press-embed/" target="_blank">Wiki Embed plugin</a>.
- * Version: 2.1.0
+ * Version: 2.4.1
  * Author: Robert D Payne
  * Author URI: http://www.robert-d-payne.com/
  *
@@ -100,7 +100,7 @@ class Wiki_Embed {
             if(empty($this->wikiembeds))$this->wikiembeds = array();
             
             $this->content_count = 0; 
-            $this->version       = '2.1.0';
+            $this->version       = '2.4.1';
             
 
             add_action( 'init', array( $this, 'init' ) );
@@ -156,14 +156,14 @@ class Wiki_Embed {
             switch ( $this->options['wiki-links'] ) {
                     case "overlay":
                         // embed this if tabs enabled
-                        wp_register_script( 'colorbox', plugins_url( '/rdp-wiki-press-embed/resources/js/jquery.colorbox.min.js'),array("jquery"), "1.3.20.2", true );
-                        wp_register_script( 'wiki-embed-overlay', plugins_url( '/rdp-wiki-press-embed/resources/js/overlay.js'),array( "colorbox", "jquery" ), $this->version, true );
+                        wp_register_script( 'jquery-colorbox', plugins_url( '/rdp-wiki-press-embed/resources/js/jquery.colorbox.min.js'),array("jquery"), "1.3.20.2", true );
+                        wp_register_script( 'wiki-embed-overlay', plugins_url( '/rdp-wiki-press-embed/resources/js/overlay.js'),array( "jquery-colorbox", "jquery" ), $this->version, true );
                         
                         $params['ajaxurl'] = admin_url('admin-ajax.php');
                         
                         wp_localize_script( 'wiki-embed-overlay', 'WikiEmbedSettings', $params );
-                        wp_enqueue_style( 'wiki-embed-overlay', plugins_url( '/rdp-wiki-press-embed/resources/css/colorbox.css'),false, $this->version, 'screen');
-                        $this->pre_load_scripts[] = 'colorbox';
+                        wp_enqueue_style( 'jquery-colorbox', plugins_url( '/rdp-wiki-press-embed/resources/css/colorbox.css'),false, $this->version, 'screen');
+                        $this->pre_load_scripts[] = 'jquery-colorbox';
                         $this->pre_load_scripts[] = 'wiki-embed-overlay';
                         break;
                     case "new-page":
@@ -187,9 +187,9 @@ class Wiki_Embed {
                     default:
             }
 
-        $filename = RDP_WE_PLUGIN_BASEDIR . 'resources/css/wiki.custom.css';
+        $filename = get_stylesheet_directory() . '/wiki.custom.css';
         if (file_exists($filename)) {
-            wp_register_style( 'rdp-we-style-custom', plugins_url( 'resources/css/wiki.custom.css' , __FILE__ ) );
+            wp_register_style( 'rdp-we-style-custom', get_stylesheet_directory_uri() . '/wiki.custom.css' );
             wp_enqueue_style( 'rdp-we-style-custom' );
         }                  
 
@@ -266,7 +266,6 @@ class Wiki_Embed {
     
 function customRSS(){
         add_feed('pediapress',  array( $this, 'customRSSFunc' ));
-        //add_action('do_feed_pediapress', array( $this, 'customRSSFunc' ));
 }  
 
 function customRSSFunc(){
@@ -457,12 +456,11 @@ EOD;
     }
     
     function save_meta( $post_id, $post, $update ) {
-        if ( has_shortcode( $post->post_content, 'wiki-embed' ) ) { 
-            $sKey  = get_post_meta($post_id, RDP_WE_PPE::$postMetaKey, true);
-            delete_transient($sKey);
-            delete_post_meta($post_id, RDP_WE_PPE::$postMetaKey);
-            $var = do_shortcode( $post->post_content );
-        }
+        if ( !has_shortcode( $post->post_content, 'wiki-embed' ) ) return; 
+        $sKey  = get_post_meta($post_id, RDP_WE_PPE::$postMetaKey, true);
+        delete_transient($sKey);
+        delete_post_meta($post_id, RDP_WE_PPE::$postMetaKey);
+        $var = do_shortcode( $post->post_content );
     }//save_meta
 
     function content( $content ) {
@@ -551,9 +549,9 @@ EOD;
                 // handle pediapress css
                  wp_register_style( 'rdp-ppe-style-common', plugins_url( 'resources/css/pediapress.common.css' , __FILE__ ) );
                  wp_enqueue_style( 'rdp-ppe-style-common' );
-                 $filename = RDP_WE_PLUGIN_BASEDIR . 'resources/css/pediapress.custom.css';
+                 $filename = get_stylesheet_directory() .  '/pediapress.custom.css';
                  if (file_exists($filename)) {
-                     wp_register_style( 'rdp-ppe-style-custom', plugins_url( 'resources/css/pediapress.custom.css' , __FILE__ ),array('rdp-ppe-style-common' ) );
+                     wp_register_style( 'rdp-ppe-style-custom',get_stylesheet_directory_uri() . '/pediapress.custom.css',array('rdp-ppe-style-common' ) );
                      wp_enqueue_style( 'rdp-ppe-style-custom' );
                  }                    
                 
@@ -562,12 +560,37 @@ EOD;
             }
             if(empty ($sHTML)){
                 $sHTML = $this->shortcode_handler($atts);
+                if(!has_action('wp_footer', array(&$this,'renderTOCMenu'))){
+                    add_action('wp_footer', array(&$this,'renderTOCMenu'));
+                }                
                 $sHTML = apply_filters( 'rdp_wpe_after_wiki_content_grab', $sHTML );
             }
 
             $sHTML = apply_filters( 'rdp_wpe_shortcode', $sHTML );
             return $sHTML;
     }//shortcode
+    
+    public function renderTOCMenu(){
+        $sKey  = get_post_meta(get_the_ID(), RDP_WE_PPE::$postMetaKey, true);
+        $sInlineHTML = '';
+        $contentPieces = array();
+        if(!empty($sKey))$contentPieces = get_transient( $sKey ); 
+        if(empty($contentPieces))return;
+        if(!wp_script_is('jquery-colorbox'))wp_enqueue_script( 'jquery-colorbox', plugins_url( '/resources/js/jquery.colorbox.min.js',RDP_WE_PLUGIN_BASENAME),array("jquery"), "1.3.20.2", true );   
+        wp_enqueue_script(
+                'rdp_wpe_toc_popup', 
+                plugins_url( '/resources/js/script.toc-popup.js',RDP_WE_PLUGIN_BASENAME),
+                array("jquery"), 
+                $this->version, 
+                true ); 
+        if(!wp_style_is('jquery-colorbox'))wp_enqueue_style( 'jquery-colorbox', plugins_url( '/resources/css/colorbox.css',RDP_WE_PLUGIN_BASENAME),false, "1.3.20.2", 'screen');        
+        
+        $sInlineHTML .= "<div id='rdp_wpe_toc_inline_content_wrapper' style='display:none'><div id='rdp_wpe_toc_inline_content'>";
+        $sInlineHTML .= '<h2>Table of Contents:</h2>';
+        $sInlineHTML .= $contentPieces['toc'];
+        $sInlineHTML .= "</div><!-- #rdp_wpe_inline_content --></div>";
+        echo $sInlineHTML;
+    }//renderTOCMenu
 
 
     private function shortcode_handler($atts){
@@ -716,7 +739,7 @@ EOD;
             $wiki_page_id = $this->get_page_id( $wiki_page_url, $accordion, $tabs, $this->options['default']['no-contents'], $this->options['default']['no-edit'], $this->options['default']['no-infobox'] );
 
             // make sure to load scripts
-            $this->load_scripts( $has_tabs, $has_accordion );
+            $this->load_scripts( $tabs, $accordion );
 
             /* Generate the shortcode ? */
             $wiki_embed_shortcode = $this->get_page_shortcode( $wiki_page_url, $accordion, $tabs, $this->options['default']['no-contents'], $this->options['default']['no-edit'], $this->options['default']['no-infobox'] );
@@ -759,6 +782,7 @@ EOD;
             $post = (object) null;
             $post->ID = 0; // wiki-embed is set to 0
             $post->post_title = $title;
+            $post->post_name = sanitize_title($title);
             $post->guid = get_site_url()."?wikiembed-url=".urlencode($url)."&wikiembed-title=".urlencode( $title );
             $post->post_content = $content;
             $post->post_status = "published";
@@ -1030,11 +1054,14 @@ EOD;
                     $wiki_page_body  = $this->remote_request_wikipage( $url, $update );
 
                     if ( $wiki_page_body ) { // Successfully grabbed remote contnet
+                  
                             //render page content
                         require_once( "resources/simple_html_dom.php" );
                         $html = new rdp_simple_html_dom();
                         $html->load('<html><body>'.$wiki_page_body.'</body></html>');
-                        $body = $html->find('div#globalWrapper',0);
+                        $body = $html->find('body',0);
+                        $oURLPieces = parse_url($url);
+                        $sSourceDomain = $oURLPieces['scheme'].'://'.$oURLPieces['host'];
                         
                         if($body){
                             foreach($body->find('script') as $script){
@@ -1042,10 +1069,20 @@ EOD;
                             }
                             foreach($body->find('style') as $script){
                                 $script->outertext = '';
-                            }                         
-                            $wiki_page_body = $body->outertext;                            
+                            } 
+                            foreach($body->find('img') as $img){
+                                 $oImgPieces = parse_url($img->src);
+                                 if(!isset($oImgPieces['host'])):
+                                     $sPath = $oImgPieces['path'];
+                                     if(substr($sPath, 0, 2) == '..')$sPath = substr($sPath, 3);
+                                     if(substr($sPath, 0, 1) != '/')$sPath = '/'.$sPath;
+                                     $img->src = $sSourceDomain . $sPath;
+                                 endif;
+                            }                             
+                            $wiki_page_body = $html->find('body',0)->innertext;                            
                         }
                         $html->clear();
+                       
                         $wiki_page_body = $this->render( $wiki_page_id, $wiki_page_body, $has_no_edit, $has_no_contents , $has_no_infobox, $has_accordion, $has_tabs, $remove );
                         $worked = $this->update_cache( $wiki_page_id, $wiki_page_body, $update );
                     } else { //Failed, (and there's no cache available) so show an error
@@ -1173,6 +1210,7 @@ EOD;
             //or the http status code is an error then it should not be saved.
             $error_strings = array( "Can't contact the database server" );
             $errors = false;
+            $RV = false;
             foreach ( $error_strings as $error ) {
                     if ( strpos( $wiki_page['body'], $error ) !== false ) {
                             $errors = true;
@@ -1181,10 +1219,12 @@ EOD;
             }
 
             if ( ! $errors && $wiki_page['response']['code'] == 200 ): 
-                    return $wiki_page['body'];
+                    $RV = $wiki_page['body'];
             else:
-                    return false;
-            endif;	
+                    $RV = false;
+            endif;
+            
+            return $RV;
     }
 
     /**
@@ -1237,15 +1277,16 @@ EOD;
      * @return void
      */
     function make_safe( $body ) {
+        
             global $allowedposttags;
             $new_tags = $allowedposttags;
 
-            foreach ( $allowedposttags as $tag => $array ) {
-               $new_tags[$tag]['id'] = array();
-               $new_tags[$tag]['class'] = array();
-               $new_tags[$tag]['style'] = array();
-            }
-
+//            foreach ( $allowedposttags as $tag => $array ) {
+//               $new_tags[$tag]['id'] = array();
+//               $new_tags[$tag]['class'] = array();
+//               $new_tags[$tag]['style'] = array();
+//            }
+ 
             // param
             $new_tags['param']['name'] = array();
             $new_tags['param']['value'] = array();
@@ -1274,9 +1315,17 @@ EOD;
             $new_tags['iframe']['height'] = array();
             $new_tags['iframe']['src'] = array();
             $new_tags['iframe']['frameborder'] = array();
-
+   
             // lets sanitize this 
-        $body = wp_kses( $body, $new_tags );
+	$body = wp_kses_no_null($body);
+	$body = wp_kses_js_entities($body);
+	$body = wp_kses_normalize_entities($body); 
+        $allowed_protocols = wp_allowed_protocols();
+        $body = wp_kses_hook($body, $new_tags, $allowed_protocols);
+//echo $body;
+//exit;
+//        $body = wp_kses( $body, $new_tags );
+     
             return $body;
     }
 
@@ -1800,6 +1849,6 @@ EOD;
         }
     }
     /* END OF CACHING */
-}
+}//Wiki_Embed
 
 $wikiembed_object = new Wiki_Embed();

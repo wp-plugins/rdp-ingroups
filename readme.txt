@@ -3,7 +3,7 @@ Contributors: rpayne7264, enej, ejackisch, devindra, ctlt-dev, ubcdev
 Tags: mediawiki, wiki, wiki-embed, embed, content framework, wiki inc, pediapress, pediapress embed
 Requires at least: 3.5
 Tested up to: 4.1
-Stable tag: 2.1.0
+Stable tag: 2.4.1
 
 RDP Wiki-Press Embed lets you embed MediaWiki pages in to your site, from sites like Wikipedia, and PediaPress book pages.
 
@@ -87,6 +87,7 @@ Embedding a PediaPress gallery of books is implemented using the shortcode [wiki
 
 * col: (required) number of columns to display per page
 * num: (required) number of books to display per page
+* size: accepted values - small, medium, large - dictate image and font size of gallery elements
 * cat: comma separated list of category id numbers books must belong to
 * tag: comma separated list of tag id numbers books must belong to
 * sort_col: column name by which to sort books
@@ -137,9 +138,11 @@ Here you can enable/disable various features, define shortcode defaults, and con
 5. Go to 'Settings' -> 'Permalinks' and click the 'Save Changes' button so the custom RSS feeds will work.
 
 = Gallery Items =
-To change the way each book is displayed in gallery view, you will need to modify the template file located at: 
+To change the way each book is displayed in gallery view, you will need to copy the template file located at: 
 
 `resources/ppgallery-template/ppgallery.column.results.html`
+
+Put the copy into a folder named *rdp-wiki-press-embed*, in the uploads directory, and then modify it as desired.
 
 
 A sample template that displays buttons is located at: 
@@ -147,7 +150,7 @@ A sample template that displays buttons is located at:
 `resources/ppgallery-template/ppgallery.column.results-sample.html`
 
 = Extra =
-To make everything pretty, add a wiki.custom.css and pediapress.custom.css file. Start with the wiki.custom-sample.css and pediapress.custom-sample.css files located in the 'resources/css/' folder.
+To make everything pretty, add a wiki.custom.css and pediapress.custom.css file to your theme's folder. Start with the wiki.custom-sample.css and pediapress.custom-sample.css files located in the 'resources/css/' folder.
 
 
 
@@ -163,6 +166,40 @@ To make everything pretty, add a wiki.custom.css and pediapress.custom.css file.
 
 
 == Changelog ==
+
+= 2.4.1 =
+* REFACTOR: modified code to try to convert relative image URLs to absolute URLs
+* REFACTOR: modified code to make the shortcode media button show up for all post types
+
+= 2.4.0 =
+* FEATURE: added size attribute to gallery shortcode
+* FEATURE: added ability to pick a size attribute for gallery shortcode to the shortcode helper form
+* REFACTOR: modified common css file to reflect selected gallery size
+* REFACTOR: modified HTML of default gallery results template, including hyperlinking the title to the original post
+* REFACTOR: made book titles bold, as default styling
+
+
+= 2.3.0 =
+* FEATURE: added code that adds a Table of Contents (TOC) button to pages derived from clicking a TOC link on a single PediaPress book page.
+
+= 2.2.0 =
+* REFACTOR: modified code to store book cover images in the uploads directory, inside a folder named rdp-wiki-press-embed
+* REFACTOR: modified code to look for plugin-specific custom css files within the theme directory
+* REFACTOR: modified code to look for a custom gallery template, a modified copy of the file resources/ppgallery-template/ppgallery.column.results.html, inside a folder named rdp-wiki-press-embed, in the uploads directory
+
+= Changed files: =
+* readme.txt
+* WikiEmbed.php
+* resources/rdpWEPPE.php
+* resources/rdpWEPPGallery.php
+* resources/css/pediapress.custom-sample.css
+* resources/css/wiki.custom-sample.css
+
+= Deleted folders: =
+* resources/img-cache
+
+= 2.1.1 =
+* REFACTOR: modified code to allow multiple galleries on one page
 
 = 2.1.0 =
 * FEATURE: added global setting for additional text, such as Creative Commons verbage, to be displayed under a book's cover image
@@ -431,7 +468,15 @@ To make everything pretty, add a wiki.custom.css and pediapress.custom.css file.
 
 = 0.9 =
 * Is the pre production release, please help us test it.
- 
+
+== Upgrade Notice ==
+
+= 2.2.0 =
+Re-worked code to keep cached images, custom css files, custom gallery template from being wiped out during a plugin update via the update procedure used within the WP Admin area
+For custom css of PediaPress items, the file pediapress.custom.css needs to be placed in the current theme's folder.
+For custom css of Wiki items, the file wiki.custom.css needs to be placed in the current theme's folder.
+Book cover images are now cached in the uploads directory, inside a folder named rdp-wiki-press-embed
+For a custom gallery template, place a modified copy of the file ppgallery.column.results.html inside a folder named rdp-wiki-press-embed, in the uploads directory
  
 == Other Notes ==
 

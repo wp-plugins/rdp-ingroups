@@ -4,7 +4,7 @@
 $j(document).ready(rdp_pp_gallery_overlay_onReady);
 
 function rdp_pp_gallery_overlay_onReady(){
-    $j('#mainContent .ready').removeClass('invisible');
+    $j('div.rdp_pp_book_gallery .ready').removeClass('invisible');
 
     if(typeof rdp_pp_gallery == 'undefined'){
         $j(".rdp-pp-gallery-add-to-cart").colorbox({iframe:true, innerWidth: 960, innerHeight:"80%",transition:"none"})

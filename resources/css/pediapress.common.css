@@ -11,7 +11,7 @@
     position: relative;
 }
 
-#mainContent.book_gallery {
+div.rdp_pp_book_gallery {
     position: static;
     padding-left: 0;
 }
@@ -1184,23 +1184,24 @@ body#errorpage {
 
 #mainContent.book_show #metadata #title {
     font-size: 140%;
+    font-weight: bold;
 }
 
 #mainContent.book_show .rdp-ppe-inline-content-sep{padding: 5px 0 5px 106px;font-weight: bold;}
 
-#mainContent.book_gallery .rdp-pp-gallery-metadata-container{width: 56%;float: left;padding-left: 6px;}
-#mainContent.book_gallery .rdp-pp-gallery-inline-content-sep{padding: 0;margin: 3px 0;text-align: center;font-weight: bold;}
+div.rdp_pp_book_gallery .rdp-pp-gallery-metadata-container{width: 56%;float: left;padding-left: 6px;}
+div.rdp_pp_book_gallery .rdp-pp-gallery-inline-content-sep{padding: 0;margin: 3px 0;text-align: center;font-weight: bold;}
 
-#mainContent.book_show #metadata p, #mainContent.book_gallery div.weppgallery-box p{
+#mainContent.book_show #metadata p{
     font-size: 12px;
     padding: 0;
     margin: 0 0 3px;
     line-height: normal;
 }
 
-#mainContent.book_gallery div.weppgallery-box p.cover-image-container,
-#mainContent.book_gallery div.weppgallery-box p.rdp-pp-gallery-add-to-cart-container,
-#mainContent.book_gallery div.weppgallery-box p.rdp-pp-gallery-cta-button-container
+div.rdp_pp_book_gallery div.weppgallery-box p.cover-image-container,
+div.rdp_pp_book_gallery div.weppgallery-box p.rdp-pp-gallery-add-to-cart-container,
+div.rdp_pp_book_gallery div.weppgallery-box p.rdp-pp-gallery-cta-button-container
 {
     text-align: center;
 }
@@ -1215,13 +1216,6 @@ body#errorpage {
 
 #mainContent.book_show #metadata p label{display: block;font-weight: bold;color: #000;}
 
-
-#mainContent.book_gallery div.weppgallery-box p.editor-container,
-#mainContent.book_gallery div.weppgallery-box p.subtitle-container,
-#mainContent.book_gallery div.weppgallery-box p.language-container,
-#mainContent.book_gallery div.weppgallery-box p.excerpt-container,
-#mainContent.book_gallery div.weppgallery-box p.price-currency-container,
-#mainContent.book_gallery div.weppgallery-box p.price-amount-container{font-size: 11px;}
 
 #mainContent.book_show #metadata .tag {
     font-size: 90%;
@@ -1251,6 +1245,7 @@ body#errorpage {
     font-size: .8em;
     line-height: normal;
     margin-top: 6px;
+    display: inline-table;
 }
 
 #mainContent.book_show #coverPreviewArea div a:hover{cursor: pointer;}
@@ -1362,6 +1357,61 @@ div.weppgallery-col-0{margin-left: 0}
 }
 
 #rdp-weppg-paging-controls input[disabled]{cursor: not-allowed;}
+
+
+div.rdp_pp_book_gallery div.weppgallery-box p{
+    padding: 0;
+    margin: 0 0 3px;
+    line-height: normal;
+}
+
+/*  Small Gallery 
+------------------------------------*/
+div.rdp_pp_book_gallery.small a.ppe-cover-link img{
+    width: 100%;
+    max-width: 118px;
+    height: auto;
+}
+div.rdp_pp_book_gallery.small div.weppgallery-box p.editor-container,
+div.rdp_pp_book_gallery.small div.weppgallery-box p.subtitle-container,
+div.rdp_pp_book_gallery.small div.weppgallery-box p.language-container,
+div.rdp_pp_book_gallery.small div.weppgallery-box p.excerpt-container,
+div.rdp_pp_book_gallery.small div.weppgallery-box p.price-currency-container,
+div.rdp_pp_book_gallery.small div.weppgallery-box p.price-amount-container,
+div.rdp_pp_book_gallery.small div.weppgallery-box p.book-size-container{font-size: 11px;}
+div.rdp_pp_book_gallery.small div.weppgallery-box p.title-container{font-size: 13px;font-weight: bold;}
+
+/*  Medium Gallery 
+------------------------------------*/
+div.rdp_pp_book_gallery.medium a.ppe-cover-link img{
+    width: 100%;
+    max-width: 174px;
+    height: auto;
+}
+div.rdp_pp_book_gallery.medium div.weppgallery-box p.editor-container,
+div.rdp_pp_book_gallery.medium div.weppgallery-box p.subtitle-container,
+div.rdp_pp_book_gallery.medium div.weppgallery-box p.language-container,
+div.rdp_pp_book_gallery.medium div.weppgallery-box p.excerpt-container,
+div.rdp_pp_book_gallery.medium div.weppgallery-box p.price-currency-container,
+div.rdp_pp_book_gallery.medium div.weppgallery-box p.price-amount-container,
+div.rdp_pp_book_gallery.medium div.weppgallery-box p.book-size-container{font-size: 12px;}
+div.rdp_pp_book_gallery.medium div.weppgallery-box p.title-container{font-size: 14px;font-weight: bold;}
+
+/*  Large Gallery 
+------------------------------------*/
+div.rdp_pp_book_gallery.large a.ppe-cover-link img{
+    width: 100%;
+    max-width: 201px;
+    height: auto;
+}
+div.rdp_pp_book_gallery.large div.weppgallery-box p.editor-container,
+div.rdp_pp_book_gallery.large div.weppgallery-box p.subtitle-container,
+div.rdp_pp_book_gallery.large div.weppgallery-box p.language-container,
+div.rdp_pp_book_gallery.large div.weppgallery-box p.excerpt-container,
+div.rdp_pp_book_gallery.large div.weppgallery-box p.price-currency-container,
+div.rdp_pp_book_gallery.large div.weppgallery-box p.price-amount-container,
+div.rdp_pp_book_gallery.large div.weppgallery-box p.book-size-container{font-size: 12px;}
+div.rdp_pp_book_gallery.large div.weppgallery-box p.title-container{font-size: 17px;font-weight: bold;}
 
 
 @media only screen and (max-width: 500px) {

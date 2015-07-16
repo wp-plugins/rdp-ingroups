@@ -17,17 +17,32 @@ class RDP_WE_PPE {
     } //shortcode
     
     private static function handleScripts($atts,$content = null){
-        wp_enqueue_script( 'colorbox', plugins_url( '/resources/js/jquery.colorbox.min.js',RDP_WE_PLUGIN_BASENAME),array("jquery"), "1.3.20.2", true );        
-        wp_enqueue_script( 'ppe-overlay', plugins_url( '/resources/js/pediapress-overlay.js',RDP_WE_PLUGIN_BASENAME),array("jquery",'colorbox'), "1.0", true );        
+        wp_enqueue_script( 'jquery-colorbox', plugins_url( '/resources/js/jquery.colorbox.min.js',RDP_WE_PLUGIN_BASENAME),array("jquery"), "1.3.20.2", true );        
+        wp_enqueue_script( 'ppe-overlay', plugins_url( '/resources/js/pediapress-overlay.js',RDP_WE_PLUGIN_BASENAME),array("jquery"), "1.0", true );        
+        $params = array(
+            'has_content' => 0,
+            'links_active' => 1
+            );
+        
+        switch ($atts['toc_links']) {
+            case 'logged-in':
+                if(!is_user_logged_in())$params['links_active'] = 0;
+                break;
+            case 'disabled':
+                $params['links_active'] = 0;
+                break;
+            default:
+                break;
+        }        
+        
         if(!empty($content)){
-            $params = array('fcontent' => 1);
-            wp_localize_script( 'ppe-overlay', 'rdp_we_ppe', $params );
+            $params['has_content'] = 1;
             wp_enqueue_script("jquery-ui-tabs");
             wp_enqueue_style( 'wiki-embed-admin-core-style', plugins_url( '/admin/css/jquery-ui.css',RDP_WE_PLUGIN_BASENAME ), null,'1.11.2' );            
             wp_enqueue_style( 'wiki-embed-admin-theme-style', plugins_url( '/admin/css/jquery-ui.theme.min.css',RDP_WE_PLUGIN_BASENAME ), array('wiki-embed-admin-core-style'),'1.11.2' );             
         } 
-
-        wp_enqueue_style( 'ppe-colorbox-style', plugins_url( '/resources/css/colorbox.css',RDP_WE_PLUGIN_BASENAME),false, "1.3.20.2", 'screen');        
+        wp_localize_script( 'ppe-overlay', 'rdp_we_ppe', $params );
+        wp_enqueue_style( 'colorbox-style', plugins_url( '/resources/css/colorbox.css',RDP_WE_PLUGIN_BASENAME),false, "1.3.20.2", 'screen');        
         do_action('rdp_pp_book_scripts_enqueued',$atts, $content);        
     }//handleScripts
     
@@ -103,14 +118,17 @@ class RDP_WE_PPE {
                 }
                 
                 if(!empty($sExt)){
+                    $upload_dir = wp_upload_dir();
                     $imgName = sanitize_title($contentPieces['title']) . $sExt;
-                    $imgCacheSrc = RDP_WE_PLUGIN_BASEDIR . 'resources/img-cache/' . $imgName;
+                    $imgCacheDir = $upload_dir['basedir'] . '/rdp-wiki-press-embed';
+                    if(!file_exists($imgCacheDir))mkdir($imgCacheDir, 0755);
+                    $imgCacheSrc = $imgCacheDir . '/' . $imgName;
                     if(!file_exists($imgCacheSrc)){
                         $fp = fopen($imgCacheSrc, 'x');
                         fwrite($fp, $rawImage['body']); // save the full image
                         fclose($fp);                    
                     }   
-                    $contentPieces['cover_img_src'] = plugins_url( '/resources/img-cache/' . $imgName,RDP_WE_PLUGIN_BASENAME);                    
+                    $contentPieces['cover_img_src'] =  $upload_dir['baseurl'] . '/rdp-wiki-press-embed/' . $imgName;                    
                 }else{
                     $contentPieces['cover_img_src'] = $imgSrc;
                 }
@@ -152,6 +170,11 @@ class RDP_WE_PPE {
             }
             
             $toc = $mainContent->find('ul.outline',0);
+            if($toc){
+                foreach($toc->find('a') as $link){
+                    $link->title = $link->innertext;
+                }                
+            }
             $contentPieces['toc'] = ($toc)? $toc->outertext : '';            
 
         endif;

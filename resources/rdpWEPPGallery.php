@@ -4,7 +4,8 @@ if ( ! class_exists('RDP_WE_PPGALLERY') ) :
 class RDP_WE_PPGALLERY {
     
     public static function shortcode($atts,$content = null){
-        $sHTML = '<div id="mainContent" class="book_gallery">';
+        $nGUID = uniqid();
+        $sHTML = '';
         global $wikiembed_object;     
         $wikiembed_options = $wikiembed_object->options;          
         $atts = shortcode_atts(array(
@@ -12,6 +13,7 @@ class RDP_WE_PPGALLERY {
             'num' => '10',
             'cat' => '',
             'tag' => '',
+            'size' => 'small',
             'excerpt_length' => 55,
             'sort_col' => 'post_title',
             'sort_dir' => 'ASC',
@@ -58,8 +60,8 @@ class RDP_WE_PPGALLERY {
         $start = ($paged - 1)*(int)$atts['num'];
         $sFetchSQL = self::buildFetchSQL($termIDs, $start, $atts['num'],$atts['sort_col'],$atts['sort_dir']);
         $rows = $wpdb->get_results($sFetchSQL);
-
-        $sHTML .= self::renderGallery($rows, (int)$atts['col'], $atts);
+        $sHTML .= '<div class="rdp_pp_book_gallery '. strtolower($atts['size']) .' rdp_pp_book_gallery-'. $nGUID .'">';
+        $sHTML .= self::renderGallery($rows, (int)$atts['col'], $atts,$nGUID);
         $sHTML .= '<div id="rdp_pp_gallery_footer">';
         $sHTML .= self::renderPaging($paged, $totalPages);
         $sRSSLink = self::buildRSSLink($atts);
@@ -67,7 +69,7 @@ class RDP_WE_PPGALLERY {
         $sHTML .= '<img class="rdp-pp-gallery-rss" src="' . plugins_url( '/css/images/rss-icon.png',__FILE__)  . '" />';
         $sHTML .= '</a>';
         $sHTML .= '</div><!-- #rdp_pp_gallery_footer -->';
-        $sHTML .= '</div><!-- #mainContent -->';
+        $sHTML .= '</div><!-- .rdp_pp_book_gallery -->';
         $sInlineHTML = '';
         if(!empty($atts['cta_button_content'])){
             $sInlineHTML .= "<div id='rdp_pp_gallery_inline_content_wrapper' style='display:none'><div id='rdp_pp_gallery_inline_content'>";
@@ -113,13 +115,15 @@ class RDP_WE_PPGALLERY {
     private static function handleScripts($atts,$content = null){
         wp_register_style( 'rdp-ppe-style-common', plugins_url( 'css/pediapress.common.css' , __FILE__ ) );
         wp_enqueue_style( 'rdp-ppe-style-common' );
-        $filename = RDP_WE_PLUGIN_BASEDIR . 'resources/css/pediapress.custom.css';
+
+        $filename = get_stylesheet_directory() .  '/pediapress.custom.css';
         if (file_exists($filename)) {
-            wp_register_style( 'rdp-ppe-style-custom', plugins_url( 'css/pediapress.custom.css' , __FILE__ ),array('rdp-ppe-style-common' ) );
+            wp_register_style( 'rdp-ppe-style-custom',get_stylesheet_directory_uri() . '/pediapress.custom.css',array('rdp-ppe-style-common' ) );
             wp_enqueue_style( 'rdp-ppe-style-custom' );
-        }         
-        wp_enqueue_script( 'colorbox', plugins_url( '/resources/js/jquery.colorbox.min.js',RDP_WE_PLUGIN_BASENAME),array("jquery"), "1.3.20.2", true );        
-        wp_enqueue_script( 'pp-gallery-overlay', plugins_url( '/resources/js/pediapress-gallery-overlay.js',RDP_WE_PLUGIN_BASENAME),array("jquery",'colorbox'), "1.0", true );        
+        } 
+
+        wp_enqueue_script( 'jquery-colorbox', plugins_url( '/resources/js/jquery.colorbox.min.js',RDP_WE_PLUGIN_BASENAME),array("jquery"), "1.3.20.2", true );        
+        wp_enqueue_script( 'pp-gallery-overlay', plugins_url( '/resources/js/pediapress-gallery-overlay.js',RDP_WE_PLUGIN_BASENAME),array("jquery",'jquery-colorbox'), "1.0", true );        
         if(!empty($content)){
             $params = array('fcontent' => 1);
             wp_localize_script( 'pp-gallery-overlay', 'rdp_pp_gallery', $params );
@@ -127,18 +131,29 @@ class RDP_WE_PPGALLERY {
             wp_enqueue_style( 'wiki-embed-admin-core-style', plugins_url( '/admin/css/jquery-ui.css',RDP_WE_PLUGIN_BASENAME ), null,'1.11.2' );            
             wp_enqueue_style( 'wiki-embed-admin-theme-style', plugins_url( '/admin/css/jquery-ui.theme.min.css',RDP_WE_PLUGIN_BASENAME ), array('wiki-embed-admin-core-style'),'1.11.2' );             
         }  
-        wp_enqueue_style( 'pp-gallery-colorbox-style', plugins_url( '/resources/css/colorbox.css',RDP_WE_PLUGIN_BASENAME),false, "1.3.20.2", 'screen');        
+        if(!wp_style_is('jquery-colorbox'))wp_enqueue_style( 'jquery-colorbox', plugins_url( '/resources/css/colorbox.css',RDP_WE_PLUGIN_BASENAME),false, "1.3.20.2", 'screen');        
         
         do_action('rdp_pp_gallery_scripts_enqueued',$atts, $content);        
     }//handleScripts
 
-    private static function renderGallery($rows,$cols,$atts){
+    private static function renderGallery($rows,$cols,$atts,$nGUID){
         $sHTML = '';
         $nCols = (count($rows) < $cols)? count($rows) : $cols ;
         $width = floor(100/$nCols)-1.5;
         $sClass = '';
         $nCounter = 0;
-        $template = file_get_contents(RDP_WE_PLUGIN_BASEDIR . 'resources/ppgallery-template/ppgallery.column.results.html');
+        $template = '';
+        $upload_dir = wp_upload_dir();
+        $imgCacheDir = $upload_dir['basedir'] . '/rdp-wiki-press-embed';
+        $customTemplateSrc = $imgCacheDir . '/ppgallery.column.results.html';
+        
+        if(file_exists($customTemplateSrc)){
+            $template = file_get_contents($customTemplateSrc);
+        }else{
+            $template = file_get_contents(RDP_WE_PLUGIN_BASEDIR . 'resources/ppgallery-template/ppgallery.column.results.html');
+        }
+        
+
         foreach($rows as $row):
             $contentPieces = unserialize($row->option_value);
             $sLink = '';
@@ -147,8 +162,7 @@ class RDP_WE_PPGALLERY {
             }else{
                 $sLink = $contentPieces['link'];
             }
-           
-            $sDownloadLink = get_post_meta( $row->ID, 'wiki_press_download_url', true );            
+                    
             $sImgSrc = (!empty($contentPieces['cover_img_src']))? $contentPieces['cover_img_src'] : '';
             $sTitle = (!empty($contentPieces['title']))? $contentPieces['title'] : '';
             $sSubtitle = (!empty($contentPieces['subtitle']))? $contentPieces['subtitle'] : '';
@@ -207,12 +221,12 @@ class RDP_WE_PPGALLERY {
         if ($nCounter % $cols !== 0)$sHTML .= '<div class="clear weppgallery-row-sep last" style="height: 2px;background: none;"></div>';
         
         $sHTML .= '<style type="text/css">';
-        $sHTML .= 'div.weppgallery-box{width: '. $width . '%;}';
+        $sHTML .= 'div.rdp_pp_book_gallery-'.$nGUID.' div.weppgallery-box{width: '. $width . '%;}';
         $sHTML .= '</style>';
         
         $style = <<<EOS
 <style type="text/css">
-#mainContent p.rdp-pp-gallery-cta-button-container a {
+div.rdp_pp_book_gallery-{$nGUID} p.rdp-pp-gallery-cta-button-container a {
 	-o-box-shadow:inset 0px 1px 0px 0px {$atts['cta_button_box_shadow_color']};
 	-moz-box-shadow:inset 0px 1px 0px 0px {$atts['cta_button_box_shadow_color']};
 	-webkit-box-shadow:inset 0px 1px 0px 0px {$atts['cta_button_box_shadow_color']};
@@ -255,10 +269,10 @@ class RDP_WE_PPGALLERY {
 	text-align:center;
 	text-shadow:1px 1px 0px {$atts['cta_button_text_shadow_color']};
 }
-#mainContent p.rdp-pp-gallery-cta-button-container a:hover{
+div.rdp_pp_book_gallery-{$nGUID} p.rdp-pp-gallery-cta-button-container a:hover{
     color: {$atts['cta_button_font_hover_color']};
 }
-#mainContent p.rdp-pp-gallery-cta-button-container a:active {
+div.rdp_pp_book_gallery-{$nGUID} p.rdp-pp-gallery-cta-button-container a:active {
 	position:relative;
 	top:1px;
 }</style>   

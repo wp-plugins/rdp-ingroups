@@ -1,9 +1,68 @@
-/** 
- * from 
+div.wpe-toc-link-container{
+    text-align: left;
+    font-weight:bold;
+    font-size: 12px;
+}
+
+a.wpe-toc-link {
+	-o-box-shadow:inset 0px 1px 0px 0px #fed897;
+	-moz-box-shadow:inset 0px 1px 0px 0px #fed897;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #fed897;
+	box-shadow:inset 0px 1px 0px 0px #fed897;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #faaa19), color-stop(1, #c69b00) );
+	background:-o-gradient( linear, left top, left bottom, color-stop(0.05, #faaa19), color-stop(1, #c69b00) );
+	background:-moz-linear-gradient( center top, #faaa19 5%, #c69b00 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#faaa19', endColorstr='#c69b00');
+	background-color:#faaa19;
+        background-image:linear-gradient(
+                to bottom,
+                #faaa19,
+                #c69b00
+        );            
+	-webkit-border-top-left-radius:8px;
+	-moz-border-radius-topleft:8px;
+	border-top-left-radius:8px;
+	-webkit-border-top-right-radius:8px;
+	-moz-border-radius-topright:8px;
+	border-top-right-radius:8px;
+	-webkit-border-bottom-right-radius:8px;
+	-moz-border-radius-bottomright:8px;
+	border-bottom-right-radius:8px;
+	-webkit-border-bottom-left-radius:8px;
+	-moz-border-radius-bottomleft:8px;
+	border-bottom-left-radius:8px;
+	text-indent:0px;
+	border:1px solid #eda933;
+	display:inline-block;
+	color:#ffffff;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:15px;
+	font-weight:bold;
+	font-style:normal;
+	height:30px;
+	line-height:30px;
+	width:auto;
+	padding: 0 15px;            
+	text-decoration:none;
+	text-align:center;
+	text-shadow:1px 1px 0px #000000;
+}
+a.wpe-toc-link:hover{
+    color: #ffffff;
+    background-image: -webkit-linear-gradient(top, #c69b00, #faaa19);
+    background-image: -moz-linear-gradient(top, #c69b00, #faaa19);
+    background-image: -ms-linear-gradient(top, #c69b00, #faaa19);
+    background-image: -o-linear-gradient(top, #c69b00, #faaa19);
+    background-image: linear-gradient(to bottom, #c69b00, #faaa19);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#c69b00', endColorstr='#faaa19');     
+}
+a.wpe-toc-link:active {
+	position:relative;
+	top:1px;
+}
 
 
-/* <source lang="css"> */
- 
+
 /* Main page fixes */
 #interwiki-completelist {
     font-weight: bold;

@@ -108,7 +108,9 @@ function pp_gallery_send_to_editor(){
         ppGalleryTags += $j( this ).val();
       });
 
-    var sCode = "[wiki-embed-ppgallery col='"+ppGalleryCol.val()+"' num='"+ppGalleryNum.val()+"'";
+      var ppGallerySize = jQuery("#pp-gallery-size");
+
+    var sCode = "[wiki-embed-ppgallery col='"+ppGalleryCol.val()+"' num='"+ppGalleryNum.val()+"' size='"+ppGallerySize.val()+"'";
     if(ppGalleryCats.length != 0)sCode += " cat='"+ppGalleryCats+"'";
     if(ppGalleryTags.length != 0)sCode += " tag='"+ppGalleryTags+"'";
     
