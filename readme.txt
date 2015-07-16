@@ -3,7 +3,7 @@ Contributors: rpayne7264
 Tags: linkedin,linkedin groups,rdp linkedin,rdp groups+,rdp ingroups+,rdp linkedin groups,rdp linkedin groups+,ingroups+,
 Requires at least: 3.0
 Tested up to: 4.2.2
-Stable tag: 0.6.2
+Stable tag: 0.6.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -145,6 +145,9 @@ To display a *Sign in with LinkedIn* button, use the [rdp-ingroups-login] shortc
 
 
 == Change Log ==
+
+= 0.6.3 =
+* minor bug fix
 
 = 0.6.2 =
 * modification to make the shortcode media button show up for all post types

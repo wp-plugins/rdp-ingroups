@@ -2,15 +2,19 @@
 
 class RDP_LIG_Shortcode_Popup {
     public static function addMediaButton($page = null, $target = null){
-            $rdp_lig_button_src = plugins_url('/images/linkedin.ico', __FILE__);
-	    $output_link = '<a href="#TB_inline?width=400&inlineId=rdp-lig-shortcode-popup" class="thickbox button" title="inGroups+" id="rdp-lig-shortcode-button">';
-            $output_link .= '<span class="wp-media-buttons-icon" style="background: url('. $rdp_lig_button_src.'); background-repeat: no-repeat; background-position: left bottom;"/></span>';
-            $output_link .= '</a>';
-            echo $output_link;
+        global $pagenow;
+        if ( !in_array( $pagenow, array( "post.php", "post-new.php" ) ))return;        
+        $rdp_lig_button_src = plugins_url('/images/linkedin.ico', __FILE__);
+        $output_link = '<a href="#TB_inline?width=400&inlineId=rdp-lig-shortcode-popup" class="thickbox button" title="inGroups+" id="rdp-lig-shortcode-button">';
+        $output_link .= '<span class="wp-media-buttons-icon" style="background: url('. $rdp_lig_button_src.'); background-repeat: no-repeat; background-position: left bottom;"/></span>';
+        $output_link .= '</a>';
+        echo $output_link;
       
     }//addMediaButton
     
     public static function renderPopupForm(){
+        global $pagenow;
+        if ( !in_array( $pagenow, array( "post.php", "post-new.php" ) ))return;        
         echo '<div id="rdp-lig-shortcode-popup" style="display:none;">';
         echo '<h3>Insert inGroups+ Shortcode</h3>';
         echo '<select id="ddLIGShortcode">';
