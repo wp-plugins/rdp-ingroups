@@ -104,7 +104,8 @@ class RDP_LIG_Utilities {
         if( $wp_user ) {
             wp_set_current_user( $wp_user->ID, $wp_user->user_login );
             wp_set_auth_cookie($wp_user->ID, false, false);
-            do_action('rdp_lig_after_registered_user_login', $wp_user);            
+            do_action( 'wp_login', $wp_user->user_login );
+            do_action('rdp_lig_after_registered_user_login', $wp_user);  
         }else do_action('rdp_lig_registered_user_login_fail',$user);
 
     }//handleRegisteredUserSignOn
