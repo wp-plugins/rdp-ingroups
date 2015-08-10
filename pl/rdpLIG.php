@@ -55,7 +55,7 @@ class RDP_LIG {
         $sHTML = '';        
         if(empty($attr['id'])) return $sHTML;
         if(!is_numeric($attr['id'])) return $sHTML;
-        $sURL = 'http://www.linkedin.com/groups?gid=' . $attr['id'];
+        $sURL = 'https://www.linkedin.com/grp/home?gid=' . $attr['id'];
         $html = rdp_file_get_html($sURL);
         if(!$html)return $sHTML;
         $oMemberCount = $html->find('div.header .right-entity .member-count',0);
