@@ -60,7 +60,8 @@ class RDP_LIG {
         if(!$html)return $sHTML;
         $oMemberCount = $html->find('div.header .right-entity .member-count',0);
         if(!$oMemberCount)return $sHTML;
-        $text = $oMemberCount->plaintext;
+        $text = (!empty($attr['prepend']))? trim($attr['prepend']) . ' ' : '' ;
+        $text .= $oMemberCount->plaintext;
         $link = (!empty($attr['link']))? $attr['link'] : '' ;
         $fValidLink = filter_var($link, FILTER_VALIDATE_URL);
         if($fValidLink){
